@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { RootState } from "@reduxjs/toolkit/query";
 import { authApiSlice } from "./auth-api-slice";
 
 interface InitialState {
@@ -50,3 +49,5 @@ export const authHandlerSlice = createSlice({
 });
 
 export const { setToken, logOut } = authHandlerSlice.actions;
+
+export default authHandlerSlice;

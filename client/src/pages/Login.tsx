@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { UserLoginForm } from "@/components/login-form";
+import { LoginForm } from "@/components/login-form";
 
 export default function Login() {
 	return (
@@ -14,7 +14,7 @@ export default function Login() {
 						"absolute right-4 top-4 md:right-8 md:top-8"
 					)}
 				>
-					{"Login"}
+					{"Create an account"}
 				</Link>
 				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 					<div className="absolute inset-0 bg-zinc-900" />
@@ -54,7 +54,7 @@ export default function Login() {
 								{<>Log in to your account to continue.</>}
 							</p>
 						</div>
-						{<UserLoginForm />}
+						{<LoginForm />}
 						{
 							<p className="px-8 text-center text-sm text-muted-foreground">
 								By clicking continue, you agree to our{" "}

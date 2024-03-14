@@ -8,6 +8,7 @@ import Empty from "./pages/Empty";
 import Sample from "./pages/Sample";
 import Map from "./pages/Map";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 export const router = createBrowserRouter(
 	[
@@ -31,14 +32,15 @@ export const router = createBrowserRouter(
 					path: "map",
 					element: <Map />,
 				},
-				{
-					path: "login",
-					element: <Login />,
-				},
-				{
-					path: "register",
-				},
 			],
+		},
+		{
+			path: "login",
+			element: <Login />,
+		},
+		{
+			path: "register",
+			element: <Register />,
 		},
 		{
 			path: "*",

@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { logOut, setToken } from "../features/auth/auth-handler";
-
-import { RootState } from "../store";
+import { logOut, setToken } from "@/redux/features/auth/auth-handler";
+import { authApiSlice } from "@/redux/features/auth/auth-api-slice";
+import { RootState } from "@/redux/store";
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: process.env.NEXT_PUBLIC_API_URL,
+	baseUrl: import.meta.env.VITE_API_URL as string,
 	prepareHeaders: (headers, { getState }) => {
 		const token = (getState() as RootState).auth._token;
 		if (token) {
@@ -19,14 +19,15 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 
 	if (result.error?.status === 401) {
 		const refreshResult = await api.dispatch(
-			api.endpoints.refreshToken.initiate(undefined)
+			authApiSlice.endpoints.refreshToken.initiate(undefined)
 		);
 		if (refreshResult.error) {
 			api.dispatch(logOut());
 			return result;
 		}
-		const { access_token } = refreshResult.data;
-		api.dispatch(setToken(access_token));
+		const { AccessToken, IdToken } = refreshResult.data.tokens;
+		api.dispatch(setToken(AccessToken));
+		localStorage.setItem("idToken", IdToken);
 		return baseQuery(args, api, extraOptions);
 	}
 	return result;
