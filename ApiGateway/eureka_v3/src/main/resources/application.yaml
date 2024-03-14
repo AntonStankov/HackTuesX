@@ -4,6 +4,8 @@ server:
 spring:
   cloud:
     gateway:
+      default-filters:
+        - name: CorsGlobalFilter
       routes:
         - id: server1-route
           uri: ${SERVER1_ROUTE_URI:http://139.59.209.1:80}
