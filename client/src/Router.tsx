@@ -28,11 +28,11 @@ export const router = createBrowserRouter(
 					path: "empty",
 					element: <Empty />,
 				},
-				{
-					path: "map",
-					element: <Map />,
-				},
 			],
+		},
+		{
+			path: "map",
+			element: <Map />,
 		},
 		{
 			path: "login",
