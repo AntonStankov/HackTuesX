@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,7 +29,9 @@ Route::group([
 ], function ($router) {
 
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('refresh', [AuthController::class, 'refresh']);
+
+    Route::post('refresh', [AuthController::class, 'refresh'])->middleware('jwt.refresh');
+
     Route::post('me', [AuthController::class, 'me']);
 
     Route::post('login', [AuthController::class, 'login'])->name('login');

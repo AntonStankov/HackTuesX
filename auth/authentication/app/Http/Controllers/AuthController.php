@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth; 
 
 class AuthController extends Controller
 {
@@ -32,7 +33,7 @@ class AuthController extends Controller
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
+    
         return $this->respondWithToken($token);
     }
 
@@ -63,11 +64,21 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh()
+    public function refresh(Request $request)
     {
-        return $this->respondWithToken(auth()->refresh());
-    }
+        try {
+            // Attempt to refresh the JWT token.
+            $newToken = JWTAuth::refresh();
 
+            // Return the new token.
+            return response()->json(['access_token' => $newToken]);
+        } catch (JWTException $e) {
+            // Something went wrong whilst attempting to encode the token.
+            return response()->json(['error' => 'could_not_refresh_token'], 500);
+        }
+    }
+    
+    
     /**
      * Get the token array structure.
      *
@@ -77,11 +88,14 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $refreshToken = auth()->setTTL(config('jwt.refresh_ttl'))->refresh();
+
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+        'access_token' => $token,
+        'token_type' => 'bearer',
+        'expires_in' => auth()->factory()->getTTL() * 60,
+        'refresh_token' => $refreshToken
+    ]);
     }
 
     /**
