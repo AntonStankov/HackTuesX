@@ -45,10 +45,31 @@ const simulationSlice = createSlice({
 			state.showGrid = !state.showGrid;
 			localStorage.setItem("showGrid", state.showGrid.toString());
 		},
+		bucketFill: (
+			state,
+			action: { payload: { idx: number; value: string } }
+		) => {
+			// y*200+x
+			const map = state.map.split("");
+			const stack = [action.payload.idx];
+			const target = map[action.payload.idx];
+			while (stack.length) {
+				const idx = stack.pop();
+				if (idx === undefined) break;
+				if (map[idx] === target) {
+					map[idx] = action.payload.value;
+					if (idx % 200 !== 0) stack.push(idx - 1);
+					if (idx % 200 !== 199) stack.push(idx + 1);
+					if (idx >= 200) stack.push(idx - 200);
+					if (idx < 19800) stack.push(idx + 200);
+				}
+			}
+			state.map = map.join("");
+		},
 	},
 });
 
-export const { generateMap, updateSquare, toggleGrid } =
+export const { generateMap, updateSquare, toggleGrid, bucketFill } =
 	simulationSlice.actions;
 
 export const selectMap = (state: RootState) => state.simulation.map;

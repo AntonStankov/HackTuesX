@@ -5,6 +5,7 @@ import {
 	selectMap,
 	selectShowGrid,
 	toggleGrid,
+	bucketFill,
 } from "@/redux/features/simulation/simulation-handler";
 import { useEffect } from "react";
 
@@ -38,11 +39,26 @@ export default function Map() {
 
 	return (
 		<div>
+			<Menubar className="mx-auto h-10 bg-gray-100 dark:bg-gray-800">
+				<MenubarMenu>
+					<MenubarTrigger>File</MenubarTrigger>
+					<MenubarContent>
+						<MenubarItem>
+							New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+						</MenubarItem>
+						<MenubarItem>New Window</MenubarItem>
+						<MenubarSeparator />
+						<MenubarItem>Share</MenubarItem>
+						<MenubarSeparator />
+						<MenubarItem>Print</MenubarItem>
+					</MenubarContent>
+				</MenubarMenu>
+			</Menubar>
 			<TransformWrapper>
 				<TransformComponent>
 					<ContextMenu>
 						<ContextMenuTrigger>
-							<div className="grid grid-cols-200 w-[1800px] h-[800px]">
+							<div className="grid grid-cols-200 w-[1600px] h-[800px]">
 								{map.split("").map((item, idx) => (
 									<div
 										key={idx}
@@ -56,9 +72,8 @@ export default function Map() {
 												: "bg-yellow-500"
 										}`}
 										onClick={() => {
-											dispatch({
-												type: "simulation/updateSquare",
-												payload: {
+											dispatch(
+												bucketFill({
 													idx,
 													value:
 														item === "A"
@@ -66,8 +81,20 @@ export default function Map() {
 															: item === "B"
 															? "C"
 															: "A",
-												},
-											});
+												})
+											);
+											// dispatch({
+											// 	type: "simulation/updateSquare",
+											// 	payload: {
+											// 		idx,
+											// 		value:
+											// 			item === "A"
+											// 				? "B"
+											// 				: item === "B"
+											// 				? "C"
+											// 				: "A",
+											// 	},
+											// });
 										}}
 									></div>
 								))}

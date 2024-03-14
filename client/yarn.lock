@@ -503,6 +503,19 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
+"@radix-ui/react-context-menu@^2.1.5":
+  version "2.1.5"
+  resolved "https://registry.npmjs.org/@radix-ui/react-context-menu/-/react-context-menu-2.1.5.tgz"
+  integrity sha512-R5XaDj06Xul1KGb+WP8qiOh7tKJNz2durpLBXAGZjSVtctcRFCuEvy2gtMwRJGePwQQE5nV77gs4FwRi8T+r2g==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-menu" "2.0.6"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-use-callback-ref" "1.0.1"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
+
 "@radix-ui/react-context@1.0.1":
   version "1.0.1"
   resolved "https://registry.npmjs.org/@radix-ui/react-context/-/react-context-1.0.1.tgz"
@@ -626,6 +639,23 @@
     "@radix-ui/react-use-callback-ref" "1.0.1"
     aria-hidden "^1.1.1"
     react-remove-scroll "2.5.5"
+
+"@radix-ui/react-menubar@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/@radix-ui/react-menubar/-/react-menubar-1.0.4.tgz"
+  integrity sha512-bHgUo9gayKZfaQcWSSLr++LyS0rgh+MvD89DE4fJ6TkGHvjHgPaBZf44hdka7ogOxIOdj9163J+5xL2Dn4qzzg==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-collection" "1.0.3"
+    "@radix-ui/react-compose-refs" "1.0.1"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-direction" "1.0.1"
+    "@radix-ui/react-id" "1.0.1"
+    "@radix-ui/react-menu" "2.0.6"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-roving-focus" "1.0.4"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
 
 "@radix-ui/react-popper@1.1.3":
   version "1.1.3"
@@ -1243,10 +1273,10 @@ error-ex@^1.3.1:
   dependencies:
     is-arrayish "^0.2.1"
 
-esbuild-linux-64@0.15.18:
+esbuild-darwin-arm64@0.15.18:
   version "0.15.18"
-  resolved "https://registry.npmjs.org/esbuild-linux-64/-/esbuild-linux-64-0.15.18.tgz"
-  integrity sha512-hNSeP97IviD7oxLKFuii5sDPJ+QHeiFTFLoLm7NZQligur8poNOWGIgpQ7Qf8Balb69hptMZzyOBIPtY09GZYw==
+  resolved "https://registry.npmjs.org/esbuild-darwin-arm64/-/esbuild-darwin-arm64-0.15.18.tgz"
+  integrity sha512-tKPSxcTJ5OmNb1btVikATJ8NftlyNlc8BVNtyT/UAr62JFOhwHlnoPrhYWz09akBLHI9nElFVfWSTSRsrZiDUA==
 
 esbuild@^0.15.9:
   version "0.15.18"
@@ -1367,6 +1397,11 @@ fs-extra@^11.1.0:
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
     universalify "^2.0.0"
+
+fsevents@~2.3.2:
+  version "2.3.3"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
 
 function-bind@^1.1.2:
   version "1.1.2"
@@ -1950,7 +1985,7 @@ queue-microtask@^1.2.2:
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-"react-dom@^16.8 || ^17.0 || ^18.0", react-dom@^18.2.0, react-dom@>=16.8, react-dom@>=16.8.0:
+react-dom@*, "react-dom@^16.8 || ^17.0 || ^18.0", react-dom@^18.2.0, react-dom@>=16.8, react-dom@>=16.8.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -2024,7 +2059,12 @@ react-wrap-balancer@^1.1.0:
   resolved "https://registry.npmjs.org/react-wrap-balancer/-/react-wrap-balancer-1.1.0.tgz"
   integrity sha512-EhF3jOZm5Fjx+Cx41e423qOv2c2aOvXAtym2OHqrGeMUnwERIyNsRBgnfT3plB170JmuYvts8K2KSPEIerKr5A==
 
-"react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18", "react@^16.x || ^17.x || ^18.x", react@^18.0, react@^18.2.0, react@>=16.8, react@>=16.8.0, "react@>=16.8.0 || ^17.0.0 || ^18":
+react-zoom-pan-pinch@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.npmjs.org/react-zoom-pan-pinch/-/react-zoom-pan-pinch-3.4.3.tgz"
+  integrity sha512-x5MFlfAx2D6NTpZu8OISqc2nYn4p+YEaM1p21w7S/VE1wbVzK8vRzTo9Bj1ydufa649MuP7JBRM3vvj1RftFZw==
+
+react@*, "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18", "react@^16.x || ^17.x || ^18.x", react@^18.0, react@^18.2.0, react@>=16.8, react@>=16.8.0, "react@>=16.8.0 || ^17.0.0 || ^18":
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
