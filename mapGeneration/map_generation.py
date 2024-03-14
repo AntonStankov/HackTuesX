@@ -44,9 +44,12 @@ class Ocean:
                     ocean_string += 'A'  # Water represented by 'A'
                 else:
                     ocean_string += 'L'  # Land represented by 'L'
-            ocean_string += '\n'  # Add newline after each row
+            #ocean_string += '\n'  # Add newline after each row
         return ocean_string
 
 
 #Example usage:
-#
+# ocean = Ocean()
+# ocean.generate_land()
+# ocean.display_ocean()
+# print(ocean.convert_to_string())
