@@ -9,6 +9,7 @@ import Sample from "./pages/Sample";
 import Map from "./pages/Map";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 
 export const router = createBrowserRouter(
 	[
@@ -27,6 +28,14 @@ export const router = createBrowserRouter(
 				{
 					path: "empty",
 					element: <Empty />,
+				},
+            {
+                path: "profile",
+                element: <Profile />,
+            },
+				{
+					path: "map",
+					element: <Map />,
 				},
 			],
 		},
