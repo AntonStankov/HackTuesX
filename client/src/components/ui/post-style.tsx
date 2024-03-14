@@ -1,12 +1,14 @@
-// ImageAccordion.tsx
+// PostStyle.tsx
 import React from 'react';
+import { Button } from "@/components/ui/button";
+import { useNavigate } from 'react-router-dom';
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-  } from "@/components/ui/accordion";
-  
+} from "@/components/ui/accordion";
+
 interface PostStyleProps {
   imageUrl: string;
   imageAlt: string;
@@ -16,19 +18,22 @@ interface PostStyleProps {
 }
 
 const PostStyle: React.FC<PostStyleProps> = ({ imageUrl, imageAlt, accordionContent1, accordionContent2, accordionValue }) => {
+  const navigate = useNavigate();
+
   return (
     <div>
       <img src={imageUrl} alt={imageAlt} width="150" height="100" />
+      <Button onClick={() => navigate('/map')}>Change Image</Button>
       <Accordion type="single" collapsible>
         <AccordionItem value={accordionValue}>
           <AccordionTrigger>
             Info about the map
           </AccordionTrigger>
           <AccordionContent>
-            {"Score: " + accordionContent1}
+            <strong>Score: </strong>{accordionContent1}
           </AccordionContent>
           <AccordionContent>
-            {"Analysis: " + accordionContent2}
+            <strong>Analysis: </strong>{accordionContent2}
           </AccordionContent>
         </AccordionItem>
       </Accordion>
