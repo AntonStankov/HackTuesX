@@ -18,7 +18,7 @@ module.exports = {
 		},
 		extend: {
 			gridTemplateColumns: {
-				100: "repeat(100, minmax(0, 1fr))",
+				200: "repeat(200, minmax(0, 1fr))",
 			},
 			gridTemplateRows: {
 				40: "repeat(40, minmax(0, 1fr))",
