@@ -3,15 +3,15 @@ import numpy as np
 
 
 class Ocean:
-    width = 600
-    height = 400
+    width = 200
+    height = 100
 
     def __init__(self):
         self.width = Ocean.width
         self.height = Ocean.height
         self.ocean_map = np.zeros((self.height, self.width), dtype=int)
 
-    def generate_land(self, num_landmasses=10, min_land_size=200):
+    def generate_land(self, num_landmasses=10, min_land_size=50):
         for _ in range(num_landmasses):
             max_possible_size = min(self.width // 10, self.height // 10)
             if min_land_size >= max_possible_size:
@@ -48,8 +48,5 @@ class Ocean:
         return ocean_string
 
 
-# Example usage:
-ocean = Ocean()
-ocean.generate_land()
-# ocean.display_ocean()
-# print(ocean.convert_to_string())
+#Example usage:
+#
