@@ -4,7 +4,7 @@ import { authApiSlice } from "@/redux/features/auth/auth-api-slice";
 import { RootState } from "@/redux/store";
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: import.meta.env.VITE_API_URL as string,
+	baseUrl: "http://139.59.209.1/api",
 	prepareHeaders: (headers, { getState }) => {
 		const token = (getState() as RootState).auth._token;
 		if (token) {

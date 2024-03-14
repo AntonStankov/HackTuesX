@@ -34,9 +34,9 @@ const schema = z
 		email: z.string().email(),
 		password: z
 			.string()
-			.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, {
+			.regex(/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/, {
 				message:
-					"Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, and 1 number",
+					"Password must contain at least 6 characters, including at least one uppercase letter, one lowercase letter, and one number",
 			}),
 		confirmPassword: z.string(),
 	})

@@ -3,6 +3,7 @@ import { authApiSlice } from "./auth-api-slice";
 
 interface InitialState {
 	_token: string;
+	_refreshToken: string;
 	_expires: number;
 	email: string;
 	name: string;
@@ -10,6 +11,7 @@ interface InitialState {
 
 const authState: InitialState = {
 	_token: "",
+	_refreshToken: "",
 	_expires: 0,
 	email: "",
 	name: "",
@@ -25,16 +27,21 @@ export const authHandlerSlice = createSlice({
 		},
 		logOut: (state) => {
 			state = authState;
-			localStorage.removeItem("token");
+			localStorage.clear();
 		},
 	},
 	extraReducers: (builder) => {
 		builder.addMatcher(
 			authApiSlice.endpoints.login.matchFulfilled,
 			(state, action) => {
+				state._refreshToken = action.payload.refresh_token;
 				state._token = action.payload.access_token;
 				state._expires = action.payload.expires_in;
 				localStorage.setItem("token", action.payload.access_token);
+				localStorage.setItem(
+					"refreshToken",
+					action.payload.refresh_token
+				);
 			}
 		);
 		builder.addMatcher(
@@ -43,6 +50,10 @@ export const authHandlerSlice = createSlice({
 				state._token = action.payload.access_token;
 				state._expires = action.payload.expires_in;
 				localStorage.setItem("token", action.payload.access_token);
+				localStorage.setItem(
+					"refreshToken",
+					action.payload.refresh_token
+				);
 			}
 		);
 	},

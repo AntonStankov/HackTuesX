@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { RegisterForm } from "@/components/register-form";
 
 export default function Register() {
+	console.log(import.meta.env.VITE_API_URL);
 	return (
 		<div className="container relative h-[800px] flex flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
 			<Link

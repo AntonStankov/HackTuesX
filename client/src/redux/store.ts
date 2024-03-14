@@ -1,12 +1,14 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 
 import authHandlerSlice from "./features/auth/auth-handler";
+import simulationSlice from "./features/simulation/simulation-handler";
 
 import { apiSlice } from "./api/api-slice";
 
 const AppReducer = combineReducers({
 	[apiSlice.reducerPath]: apiSlice.reducer,
 	auth: authHandlerSlice.reducer,
+	simulation: simulationSlice.reducer,
 });
 
 export const rootReducer = (state: any, action: any) => {
