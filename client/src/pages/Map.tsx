@@ -6,8 +6,17 @@ import {
 	selectShowGrid,
 	toggleGrid,
 	bucketFill,
+	selectHistory,
+	selectIndex,
+	updateSquare,
+	redoAction,
+	undoAction,
+	setHistory,
+	selectPickedColor,
+	changeColor,
 } from "@/redux/features/simulation/simulation-handler";
-import { useEffect } from "react";
+
+import { useEffect, useState } from "react";
 
 import {
 	Menubar,
@@ -27,10 +36,17 @@ import {
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 
+import { Button } from "@/components/ui/button";
+
 export default function Map() {
-	let singleClickTimer: NodeJS.Timeout | null = null;
+	const [singleClickTimer, setSingleClickTimer] =
+		useState<NodeJS.Timeout | null>(null);
 
 	const map = useAppSelector(selectMap);
+	const history = useAppSelector(selectHistory);
+	const index = useAppSelector(selectIndex);
+	const tileColor = useAppSelector(selectPickedColor);
+
 	const showGrid = useAppSelector(selectShowGrid);
 
 	const dispatch = useAppDispatch();
@@ -41,26 +57,20 @@ export default function Map() {
 
 	function handleSquareClick(idx: number) {
 		if (singleClickTimer === null) {
-			singleClickTimer = setTimeout(() => {
-				dispatch({
-					type: "simulation/updateSquare",
-					payload: {
-						idx,
-						value: map[idx] === "A" ? "B" : "A",
-					},
-				});
-				singleClickTimer = null;
-			}, 200);
+			setSingleClickTimer(
+				setTimeout(() => {
+					dispatch(updateSquare({ idx, value: tileColor }));
+					setSingleClickTimer(null);
+				}, 200)
+			);
+
+			dispatch(setHistory());
 		} else {
 			clearTimeout(singleClickTimer);
-			singleClickTimer = null;
-			dispatch({
-				type: "simulation/bucketFill",
-				payload: {
-					idx,
-					value: map[idx] === "A" ? "B" : "A",
-				},
-			});
+			setSingleClickTimer(null);
+			dispatch(bucketFill({ idx, value: tileColor }));
+
+			dispatch(setHistory());
 		}
 	}
 
@@ -86,15 +96,15 @@ export default function Map() {
 					<ContextMenu>
 						<ContextMenuTrigger>
 							<div className="grid grid-cols-200 w-[1600px] h-[800px]">
-								{map.split("").map((item, idx) => (
+								{map.split("").map((_, idx) => (
 									<div
 										key={idx}
 										className={`h-2 w-2 
 										${showGrid ? "outline outline-gray-300 dark:outline-gray-700" : ""}
 										${
-											item === "A"
+											map[idx] === "A"
 												? "bg-blue-500"
-												: item === "B"
+												: map[idx] === "B"
 												? "bg-green-500"
 												: "bg-yellow-500"
 										}`}
@@ -116,6 +126,39 @@ export default function Map() {
 					</ContextMenu>
 				</TransformComponent>
 			</TransformWrapper>
+			<div className="flex justify-center absolute bottom-0 right-0">
+				<div className="flex space-x-2">
+					<Button
+						onClick={() => dispatch(changeColor("A"))}
+						className={`h-8 w-8 rounded-full bg-blue-500 hover:bg-blue-600`}
+					></Button>
+					<Button
+						onClick={() => dispatch(changeColor("B"))}
+						className={`h-8 w-8 rounded-full bg-green-500 hover:bg-green-600`}
+					></Button>
+					<Button
+						onClick={() => dispatch(changeColor("C"))}
+						className={`h-8 w-8 rounded-full bg-yellow-500 hover:bg-yellow-600`}
+					></Button>
+				</div>
+				<Button
+					onClick={() => dispatch({ type: "simulation/generateMap" })}
+				>
+					Generate
+				</Button>
+				<Button
+					onClick={() => dispatch(redoAction())}
+					disabled={index === history.length - 1}
+				>
+					Redo
+				</Button>
+				<Button
+					onClick={() => dispatch(undoAction())}
+					disabled={index === 0}
+				>
+					Undo
+				</Button>
+			</div>
 		</div>
 	);
 }

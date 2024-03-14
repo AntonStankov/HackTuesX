@@ -16,11 +16,17 @@ function generateStringWithLength(length: number) {
 interface MapState {
 	map: string; // 20000 characters of A, B, C
 	showGrid: boolean;
+	history: string[];
+	index: number;
+	pickedColor: "A" | "B" | "C";
 }
 
 const initialState: MapState = {
 	map: localStorage.getItem("map") || generateStringWithLength(20000),
 	showGrid: localStorage.getItem("showGrid") === "true",
+	history: [],
+	index: 0,
+	pickedColor: "A",
 };
 
 const simulationSlice = createSlice({
@@ -29,6 +35,7 @@ const simulationSlice = createSlice({
 	reducers: {
 		generateMap: (state) => {
 			state.map = generateStringWithLength(20000);
+			state.history = [];
 			localStorage.setItem("map", state.map);
 		},
 		updateSquare: (
@@ -40,10 +47,6 @@ const simulationSlice = createSlice({
 				state.map.slice(0, action.payload.idx) +
 				action.payload.value +
 				state.map.slice(action.payload.idx + 1);
-		},
-		toggleGrid: (state) => {
-			state.showGrid = !state.showGrid;
-			localStorage.setItem("showGrid", state.showGrid.toString());
 		},
 		bucketFill: (
 			state,
@@ -66,13 +69,48 @@ const simulationSlice = createSlice({
 			}
 			state.map = map.join("");
 		},
+		changeColor: (state, action: { payload: "A" | "B" | "C" }) => {
+			state.pickedColor = action.payload;
+		},
+		toggleGrid: (state) => {
+			state.showGrid = !state.showGrid;
+			localStorage.setItem("showGrid", state.showGrid.toString());
+		},
+		setHistory: (state) => {
+			state.history.push(state.map);
+			state.index = state.history.length - 1;
+		},
+		undoAction: (state) => {
+			if (state.index > 0) {
+				state.index -= 1;
+				state.map = state.history[state.index];
+			}
+		},
+		redoAction: (state) => {
+			if (state.index < state.history.length - 1) {
+				state.index += 1;
+				state.map = state.history[state.index];
+			}
+		},
 	},
 });
 
-export const { generateMap, updateSquare, toggleGrid, bucketFill } =
-	simulationSlice.actions;
+export const {
+	generateMap,
+	updateSquare,
+	bucketFill,
+	changeColor,
+	toggleGrid,
+	undoAction,
+	redoAction,
+	setHistory,
+} = simulationSlice.actions;
 
 export const selectMap = (state: RootState) => state.simulation.map;
 export const selectShowGrid = (state: RootState) => state.simulation.showGrid;
+export const selectPickedColor = (state: RootState) =>
+	state.simulation.pickedColor;
+export const selectHistory = (state: RootState) => state.simulation.history;
+export const selectIndex = (state: RootState) => state.simulation.index;
 
 export default simulationSlice;
