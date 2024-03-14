@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/context-menu";
 
 export default function Map() {
+	let singleClickTimer: NodeJS.Timeout | null = null;
+
 	const map = useAppSelector(selectMap);
 	const showGrid = useAppSelector(selectShowGrid);
 
@@ -36,6 +38,31 @@ export default function Map() {
 	useEffect(() => {
 		dispatch({ type: "simulation/generateMap" });
 	}, []);
+
+	function handleSquareClick(idx: number) {
+		if (singleClickTimer === null) {
+			singleClickTimer = setTimeout(() => {
+				dispatch({
+					type: "simulation/updateSquare",
+					payload: {
+						idx,
+						value: map[idx] === "A" ? "B" : "A",
+					},
+				});
+				singleClickTimer = null;
+			}, 200);
+		} else {
+			clearTimeout(singleClickTimer);
+			singleClickTimer = null;
+			dispatch({
+				type: "simulation/bucketFill",
+				payload: {
+					idx,
+					value: map[idx] === "A" ? "B" : "A",
+				},
+			});
+		}
+	}
 
 	return (
 		<div>
@@ -71,31 +98,7 @@ export default function Map() {
 												? "bg-green-500"
 												: "bg-yellow-500"
 										}`}
-										onClick={() => {
-											dispatch(
-												bucketFill({
-													idx,
-													value:
-														item === "A"
-															? "B"
-															: item === "B"
-															? "C"
-															: "A",
-												})
-											);
-											// dispatch({
-											// 	type: "simulation/updateSquare",
-											// 	payload: {
-											// 		idx,
-											// 		value:
-											// 			item === "A"
-											// 				? "B"
-											// 				: item === "B"
-											// 				? "C"
-											// 				: "A",
-											// 	},
-											// });
-										}}
+										onClick={() => handleSquareClick(idx)}
 									></div>
 								))}
 							</div>
