@@ -10,6 +10,7 @@ import Map from "./pages/Map";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import CreateSimulation from "./pages/CreateSimulation";
 
 export const router = createBrowserRouter(
 	[
@@ -18,7 +19,7 @@ export const router = createBrowserRouter(
 			element: <Applayout />,
 			children: [
 				{
-					path: "",
+					path: "dashboard",
 					element: <Dashboard />,
 				},
 				{
@@ -32,6 +33,10 @@ export const router = createBrowserRouter(
 				{
 					path: "profile",
 					element: <Profile />,
+				},
+				{
+					path: "new",
+					element: <CreateSimulation />,
 				},
 			],
 		},
