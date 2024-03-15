@@ -1,10 +1,10 @@
 name: Deploy Client
 
-# on:
-#     workflow_dispatch:
 on:
-    push:
-        branches: ["development"]
+    workflow_dispatch:
+# on:
+#     push:
+#         branches: ["development"]
 
 jobs:
     deploy:
@@ -26,7 +26,8 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "npm"
-
+            - name: CD into client
+              run: cd client
             - name: Install packages
               run: npm i
 
