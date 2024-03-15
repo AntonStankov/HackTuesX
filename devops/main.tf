@@ -8,6 +8,7 @@ terraform {
 }
 variable "do_token" {}
 variable "ssh_key" {}
+variable "ssh_larvel" {}
 
 
 
@@ -38,6 +39,11 @@ variable "size" {
 resource "digitalocean_ssh_key" "ssh_key" {
   name       = "terraform"
   public_key = var.ssh_key
+}
+
+resource "digitalocean_ssh_key" "ssh_larvel" {
+  name       = "terraform"
+  public_key = var.ssh_larvel
 }
 
 
@@ -121,6 +127,17 @@ resource "digitalocean_droplet" "jenkins" {
   image  = "ubuntu-20-04-x64"
   
   ssh_keys    = [digitalocean_ssh_key.ssh_key.fingerprint]
+  monitoring  = true
+  ipv6        = true
+}
+
+resource "digitalocean_droplet" "larvel_server_2" {
+  name   = "larvel"
+  region = var.region
+  size   = var.size
+  image  = "ubuntu-20-04-x64"
+  
+  ssh_keys    = [digitalocean_ssh_key.ssh_larvel.fingerprint]
   monitoring  = true
   ipv6        = true
 }
