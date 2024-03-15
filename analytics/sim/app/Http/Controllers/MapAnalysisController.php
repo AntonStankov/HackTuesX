@@ -24,7 +24,7 @@ class MapAnalysisController extends Controller
 
         $fishLife = 0;
         $sharkLife = 0;
-        $oceanCleaness = 100;
+        $oceanCleanliness = 100;
         $shipProductivity = 0;
         $rigProductivity = 0;
         $efficiency=0;
@@ -92,9 +92,9 @@ class MapAnalysisController extends Controller
                             $counts['bigShip' . $shipChar]++;
                             $i += 3; 
                             if ($char == 'T' || $char =='B'){
-                                $oceanCleaness -= 10;
+                                $oceanCleanliness -= 10;
                             }else {
-                                $oceanCleaness -= 5;
+                                $oceanCleanliness -= 5;
                             }
 
                             if($char == 'T'|| $char == 'D'){
@@ -146,9 +146,9 @@ class MapAnalysisController extends Controller
                             $counts['smallShip' . $shipChar]++;
                             $i += 2; 
                             if ($char == 'G' || $char =='J'){
-                                $oceanCleaness -= 10;
+                                $oceanCleanliness -= 10;
                             }else {
-                                $oceanCleaness -= 5;
+                                $oceanCleanliness -= 5;
                             }
 
                             if($char == 'E'|| $char == 'G'){
@@ -219,10 +219,10 @@ class MapAnalysisController extends Controller
                         $fnearr = $this->checkFishAroundRigs($grid, $rowIndex, $colIndex, $char, $fishCharacters);
                         if($fnearr == 0){
                             $fishLife += 15;
-                            $oceanCleaness -=5;
+                            $oceanCleanliness -=5;
                           
                         }elseif($fnearr == 1){
-                            $oceanCleaness -= 10;
+                            $oceanCleanliness -= 10;
                          
                             $fishLife -= 10;
                         }
@@ -264,7 +264,7 @@ class MapAnalysisController extends Controller
         if($sharkLife < 0)$sharkLife = 0;
         if($sharkLife > 100)$sharkLife = 100;
 
-        $ecology = ($fishLife + $sharkLife + $oceanCleaness)/3;
+        $ecology = ($fishLife + $sharkLife + $oceanCleanliness)/3;
         $budget = $budget / 3;
         $efficiency = ($shipProductivity + $rigProductivity)/2;
         $index = ($efficiency - $budget/3) + $ecology;
@@ -278,7 +278,7 @@ class MapAnalysisController extends Controller
             'efficiency' => $efficiency, // Ensure $efficiency is calculated within your logic
             'sharkLife' => $sharkLife, // Adjusted within your logic
             'fishLife' => $fishLife, // Adjusted within your logic
-            'oceanCleaness' => $oceanCleaness, // Adjusted within your logic
+            'oceanCleaness' => $oceanCleanliness, // Adjusted within your logic
             'shipProductivity' => $shipProductivity, // Adjusted within your logic
             'rigProductivity' => $rigProductivity, // Adjusted within your logic
         ];
