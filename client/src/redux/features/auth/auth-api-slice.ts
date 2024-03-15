@@ -59,7 +59,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 		}),
 		getUser: builder.query<void, void>({
 			query: () => ({
-				url: "api/user",
+				url: "media/user",
 				method: "GET",
 			}),
 		}),

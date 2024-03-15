@@ -3,7 +3,7 @@ import type { RootState } from "@/redux/store";
 
 function generateStringWithLength(length: number) {
 	const result = [];
-	const characters = "ABC";
+	const characters = "AL";
 	const charactersLength = characters.length;
 	for (let i = 0; i < length; i++) {
 		result.push(
@@ -13,12 +13,25 @@ function generateStringWithLength(length: number) {
 	return result.join("");
 }
 
+export enum Color {
+	Water = "A",
+	Shark = "K",
+	PredatorFish = "X",
+	WeakFish = "C",
+	PassiveFish = "F",
+	OilRig = "O",
+}
+
+interface TileConstruction {
+	tilesIdxs: number[];
+	color: Color;
+}
 interface MapState {
 	map: string; // 20000 characters of A, B, C
 	showGrid: boolean;
 	history: string[];
 	index: number;
-	pickedColor: "A" | "B" | "C";
+	pickedColor: Color;
 }
 
 const initialState: MapState = {
@@ -26,8 +39,13 @@ const initialState: MapState = {
 	showGrid: localStorage.getItem("showGrid") === "true",
 	history: [],
 	index: 0,
-	pickedColor: "A",
+	pickedColor: Color.Water,
 };
+
+// Oil rigs are gonna be 4x4 squares
+// Sharks are gonna be 1x2 squares
+// Fish are gonna be 1x1 squares
+// Water is gonna be 1x1 squares
 
 const simulationSlice = createSlice({
 	name: "simulation",
@@ -47,6 +65,62 @@ const simulationSlice = createSlice({
 				state.map.slice(0, action.payload.idx) +
 				action.payload.value +
 				state.map.slice(action.payload.idx + 1);
+
+			let tileConstruction: TileConstruction;
+
+			switch (action.payload.value) {
+				case Color.OilRig:
+					tileConstruction = {
+						tilesIdxs: [
+							action.payload.idx,
+							action.payload.idx + 1,
+							action.payload.idx + 200,
+							action.payload.idx + 201,
+						],
+						color: Color.OilRig,
+					};
+					break;
+				case Color.Shark:
+					tileConstruction = {
+						tilesIdxs: [
+							action.payload.idx,
+							action.payload.idx + 200,
+						],
+						color: Color.Shark,
+					};
+					break;
+				case Color.PredatorFish:
+					tileConstruction = {
+						tilesIdxs: [action.payload.idx],
+						color: Color.PredatorFish,
+					};
+					break;
+				case Color.WeakFish:
+					tileConstruction = {
+						tilesIdxs: [action.payload.idx],
+						color: Color.WeakFish,
+					};
+					break;
+				case Color.PassiveFish:
+					tileConstruction = {
+						tilesIdxs: [action.payload.idx],
+						color: Color.PassiveFish,
+					};
+					break;
+				default:
+					tileConstruction = {
+						tilesIdxs: [],
+						color: Color.Water,
+					};
+					break;
+			}
+
+			tileConstruction.tilesIdxs.forEach((idx) => {
+				state.map =
+					state.map.slice(0, idx) +
+					tileConstruction.color +
+					state.map.slice(idx + 1);
+			});
 		},
 		bucketFill: (
 			state,
@@ -75,7 +149,7 @@ const simulationSlice = createSlice({
 			}
 			state.map = map.join("");
 		},
-		changeColor: (state, action: { payload: "A" | "B" | "C" }) => {
+		changeColor: (state, action: { payload: Color }) => {
 			state.pickedColor = action.payload;
 		},
 		toggleGrid: (state) => {

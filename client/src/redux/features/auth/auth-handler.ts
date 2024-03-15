@@ -10,8 +10,8 @@ interface InitialState {
 }
 
 const authState: InitialState = {
-	_token: "",
-	_refreshToken: "",
+	_token: localStorage.getItem("token") || "",
+	_refreshToken: localStorage.getItem("refreshToken") || "",
 	_expires: 0,
 	email: "",
 	name: "",

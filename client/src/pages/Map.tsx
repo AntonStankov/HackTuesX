@@ -33,6 +33,33 @@ import { useNavigate } from "react-router-dom";
 
 import { Redo, Undo } from "lucide-react";
 
+import { useDroppable } from "@dnd-kit/core";
+
+import { Color } from "@/redux/features/simulation/simulation-handler";
+
+interface Tile {
+	color: string;
+	label: string;
+	colorLetter: Color;
+}
+
+const tileTypes: Tile[] = [
+	{ color: "bg-blue-900", label: "Shark", colorLetter: Color.Shark },
+	{
+		color: "bg-blue-800",
+		label: "Predator Fish",
+		colorLetter: Color.PredatorFish,
+	},
+	{ color: "bg-yellow-600", label: "Weak Fish", colorLetter: Color.WeakFish },
+	{
+		color: "bg-orange-500",
+		label: "Passive Fish",
+		colorLetter: Color.PassiveFish,
+	},
+	{ color: "bg-primary", label: "Oil Rig", colorLetter: Color.OilRig },
+	{ color: "bg-blue-500", label: "Water", colorLetter: Color.Water },
+];
+
 export default function Map() {
 	const [singleClickTimer, setSingleClickTimer] =
 		useState<NodeJS.Timeout | null>(null);
@@ -46,6 +73,10 @@ export default function Map() {
 
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+
+	const { isOver, setNodeRef } = useDroppable({
+		id: "all",
+	});
 
 	useEffect(() => {
 		dispatch({ type: "simulation/generateMap" });
@@ -109,6 +140,25 @@ export default function Map() {
 		window.xarrow.updateAll();
 	}
 
+	function colorTile(letter: string) {
+		switch (letter) {
+			case "L":
+				return "bg-green-500";
+			case Color.Shark:
+				return "bg-blue-900";
+			case Color.PredatorFish:
+				return "bg-blue-800";
+			case Color.WeakFish:
+				return "bg-yellow-600";
+			case Color.PassiveFish:
+				return "bg-yellow-700";
+			case Color.OilRig:
+				return "bg-black-500";
+			case Color.Water:
+				return "bg-blue-500";
+		}
+	}
+
 	return (
 		<div className="flex flex-col items-center justify-center">
 			<Draggable
@@ -142,13 +192,24 @@ export default function Map() {
 											key={idx}
 											className={`h-2 w-2 
 										${showGrid ? "outline outline-gray-300 dark:outline-gray-700" : ""}
-										${
-											map[idx] === "A"
-												? "bg-blue-500"
-												: map[idx] === "B"
-												? "bg-green-500"
-												: "bg-yellow-500"
-										}`}
+										${colorTile(map[idx])} 
+										`}
+											style={{
+												top: `${
+													Math.floor(idx / 200) * 2
+												}rem`,
+												left: `${(idx % 200) * 2}rem`,
+											}}
+											onContextMenu={(e) => {
+												e.preventDefault();
+												dispatch(
+													updateSquare({
+														idx,
+														value: tileColor,
+													})
+												);
+												dispatch(setHistory());
+											}}
 											onClick={() =>
 												handleSquareClick(idx)
 											}
@@ -174,18 +235,15 @@ export default function Map() {
 			</Draggable>
 			<div className="absolute bottom-10 right-5 p-4 space-x-4 inline-flex border border-gray-300 dark:border-gray-700 rounded-lg">
 				<div className="flex space-x-2">
-					<Button
-						onClick={() => dispatch(changeColor("A"))}
-						className={`h-8 w-8 rounded-full bg-blue-500 hover:bg-blue-600`}
-					></Button>
-					<Button
-						onClick={() => dispatch(changeColor("B"))}
-						className={`h-8 w-8 rounded-full bg-green-500 hover:bg-green-600`}
-					></Button>
-					<Button
-						onClick={() => dispatch(changeColor("C"))}
-						className={`h-8 w-8 rounded-full bg-yellow-500 hover:bg-yellow-600`}
-					></Button>
+					{tileTypes.map((tile, idx) => (
+						<button
+							key={idx}
+							onClick={() =>
+								dispatch(changeColor(tile.colorLetter))
+							}
+							className={`h-8 w-8 ${tile.color}`}
+						></button>
+					))}
 				</div>
 				<Button
 					onClick={() => dispatch({ type: "simulation/generateMap" })}
