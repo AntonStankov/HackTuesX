@@ -4,7 +4,6 @@ import { Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
-import { AvatarFallback } from "@radix-ui/react-avatar";
 
 interface ChatTopbarProps {
 	selectedUser: UserData;

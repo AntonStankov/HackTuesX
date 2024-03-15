@@ -33,6 +33,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 		register: builder.mutation<LoginResponse, RegisterRequest>({
 			query: ({ email, password, name }) => ({
 				url: "api/auth/register",
+				// add no cors
 				method: "POST",
 				body: {
 					email,
@@ -53,6 +54,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
 				method: "POST",
 			}),
 		}),
+		getUser: builder.query<void, void>({
+			query: () => ({
+				url: "api/user",
+				method: "GET",
+			}),
+		}),
 	}),
 	overrideExisting: false,
 });
@@ -62,4 +69,5 @@ export const {
 	useRegisterMutation,
 	useLogoutMutation,
 	useRefreshTokenMutation,
+	useGetUserQuery,
 } = authApiSlice;

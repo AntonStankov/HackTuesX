@@ -10,9 +10,12 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { DialogHeader } from "@/components/ui/dialog";
+import { useGetUserQuery } from "@/redux/features/auth/auth-api-slice";
 
 export default function Profile() {
 	// profile page like threads.net
+	const { data, isLoading, isError } = useGetUserQuery();
+	console.log(data);
 	return (
 		<div className="flex flex-col gap-4 max-w-3xl mx-auto p-4">
 			<div className="flex flex-col justify-between items-center">

@@ -19,16 +19,6 @@ import {
 import { useEffect, useState } from "react";
 
 import {
-	Menubar,
-	MenubarContent,
-	MenubarItem,
-	MenubarMenu,
-	MenubarSeparator,
-	MenubarShortcut,
-	MenubarTrigger,
-} from "@/components/ui/menubar";
-
-import {
 	ContextMenu,
 	ContextMenuCheckboxItem,
 	ContextMenuContent,
@@ -38,7 +28,10 @@ import {
 
 import { Button } from "@/components/ui/button";
 
+import Draggable from "react-draggable";
 import { useNavigate } from "react-router-dom";
+
+import { Redo, Undo } from "lucide-react";
 
 export default function Map() {
 	const [singleClickTimer, setSingleClickTimer] =
@@ -111,32 +104,43 @@ export default function Map() {
 		}
 	}
 
+	function updateXarrow() {
+		// @ts-ignore
+		window.xarrow.updateAll();
+	}
+
 	return (
-		<div>
-			<Menubar className="mx-auto h-10 bg-gray-100 dark:bg-gray-800">
-				<MenubarMenu>
-					<MenubarTrigger>File</MenubarTrigger>
-					<MenubarContent>
-						<MenubarItem>
-							New Tab <MenubarShortcut>⌘T</MenubarShortcut>
-						</MenubarItem>
-						<MenubarItem>New Window</MenubarItem>
-						<MenubarSeparator />
-						<MenubarItem>Share</MenubarItem>
-						<MenubarSeparator />
-						<MenubarItem>Print</MenubarItem>
-					</MenubarContent>
-				</MenubarMenu>
-			</Menubar>
-			<TransformWrapper>
-				<TransformComponent>
-					<ContextMenu>
-						<ContextMenuTrigger>
-							<div className="grid grid-cols-200 w-[1600px] h-[800px]">
-								{map.split("").map((_, idx) => (
-									<div
-										key={idx}
-										className={`h-2 w-2 
+		<div className="flex flex-col items-center justify-center">
+			<Draggable
+				bounds="parent"
+				axis="both"
+				handle=".handle"
+				defaultPosition={{ x: 0, y: 0 }}
+				grid={[1, 1]}
+				scale={1}
+			>
+				<TransformWrapper
+					doubleClick={{ disabled: true }}
+					initialScale={1.5}
+					minScale={1}
+					maxScale={5}
+					limitToBounds
+					maxPositionX={0}
+					maxPositionY={0}
+					minPositionX={0}
+					minPositionY={0}
+					onPanning={updateXarrow}
+					onZoom={updateXarrow}
+					pinch={{ step: 5 }}
+				>
+					<TransformComponent>
+						<ContextMenu>
+							<ContextMenuTrigger>
+								<div className="grid grid-cols-200 relative overflow-hidden h-[800px] w-[1600px]">
+									{map.split("").map((_, idx) => (
+										<div
+											key={idx}
+											className={`h-2 w-2 
 										${showGrid ? "outline outline-gray-300 dark:outline-gray-700" : ""}
 										${
 											map[idx] === "A"
@@ -145,25 +149,30 @@ export default function Map() {
 												? "bg-green-500"
 												: "bg-yellow-500"
 										}`}
-										onClick={() => handleSquareClick(idx)}
-									></div>
-								))}
-							</div>
-						</ContextMenuTrigger>
-						<ContextMenuContent>
-							<ContextMenuCheckboxItem
-								checked={showGrid}
-								onCheckedChange={() => dispatch(toggleGrid())}
-							>
-								Show Grid
-							</ContextMenuCheckboxItem>
-							<ContextMenuItem>Item 2</ContextMenuItem>
-							<ContextMenuItem>Item 3</ContextMenuItem>
-						</ContextMenuContent>
-					</ContextMenu>
-				</TransformComponent>
-			</TransformWrapper>
-			<div className="absolute bottom-5 right-5 p-4 space-x-4">
+											onClick={() =>
+												handleSquareClick(idx)
+											}
+										></div>
+									))}
+								</div>
+							</ContextMenuTrigger>
+							<ContextMenuContent>
+								<ContextMenuCheckboxItem
+									checked={showGrid}
+									onCheckedChange={() =>
+										dispatch(toggleGrid())
+									}
+								>
+									Show Grid
+								</ContextMenuCheckboxItem>
+								<ContextMenuItem>Item 2</ContextMenuItem>
+								<ContextMenuItem>Item 3</ContextMenuItem>
+							</ContextMenuContent>
+						</ContextMenu>
+					</TransformComponent>
+				</TransformWrapper>
+			</Draggable>
+			<div className="absolute bottom-10 right-5 p-4 space-x-4 inline-flex border border-gray-300 dark:border-gray-700 rounded-lg">
 				<div className="flex space-x-2">
 					<Button
 						onClick={() => dispatch(changeColor("A"))}
@@ -184,16 +193,16 @@ export default function Map() {
 					Generate
 				</Button>
 				<Button
-					onClick={() => dispatch(redoAction())}
-					disabled={index === history.length - 1}
-				>
-					Redo
-				</Button>
-				<Button
 					onClick={() => dispatch(undoAction())}
 					disabled={index === 0}
 				>
-					Undo
+					<Undo />
+				</Button>
+				<Button
+					onClick={() => dispatch(redoAction())}
+					disabled={index === history.length - 1}
+				>
+					<Redo />
 				</Button>
 			</div>
 		</div>
