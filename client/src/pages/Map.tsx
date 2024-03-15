@@ -55,6 +55,29 @@ export default function Map() {
 		dispatch({ type: "simulation/generateMap" });
 	}, []);
 
+	useEffect(() => {
+		const down = (e: KeyboardEvent) => {
+			if (e.key === "z" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				dispatch(undoAction());
+			}
+		};
+
+		document.addEventListener("keydown", down);
+		return () => document.removeEventListener("keydown", down);
+	}, []);
+
+	useEffect(() => {
+		const down = (e: KeyboardEvent) => {
+			if (e.key === "y" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				dispatch(redoAction());
+			}
+		};
+		document.addEventListener("keydown", down);
+		return () => document.removeEventListener("keydown", down);
+	}, []);
+
 	function handleSquareClick(idx: number) {
 		if (singleClickTimer === null) {
 			setSingleClickTimer(
@@ -126,7 +149,7 @@ export default function Map() {
 					</ContextMenu>
 				</TransformComponent>
 			</TransformWrapper>
-			<div className="flex justify-center absolute bottom-0 right-0">
+			<div className="absolute bottom-5 right-5 p-4 space-x-4">
 				<div className="flex space-x-2">
 					<Button
 						onClick={() => dispatch(changeColor("A"))}
