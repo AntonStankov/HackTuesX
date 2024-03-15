@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import CreateSimulation from "./pages/CreateSimulation";
+import Chat from "./pages/Chat";
 
 export const router = createBrowserRouter(
 	[
@@ -37,6 +38,10 @@ export const router = createBrowserRouter(
 				{
 					path: "profile",
 					element: <Profile />,
+				},
+				{
+					path: "chat",
+					element: <Chat />,
 				},
 			],
 		},
