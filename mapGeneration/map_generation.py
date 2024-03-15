@@ -44,7 +44,7 @@ class Ocean:
                     ocean_string += 'A'  # Water represented by 'A'
                 else:
                     ocean_string += 'L'  # Land represented by 'L'
-            #ocean_string += '\n'  # Add newline after each row
+            ocean_string += '\n'  # Add newline after each row
         return ocean_string
 
 

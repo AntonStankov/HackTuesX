@@ -74,20 +74,30 @@ def save_map(token):
     print(map_string)
     try:
         # Connect to the database
-        cnx = mysql.connector.connect(user=username, password=password,
-                                      host='138.197.120.158',
-                                      port=3306,
-                                      database='test_db')
-        cursor = cnx.cursor()
+        print("database")
+        try:
+            cnx = mysql.connector.connect(user=username, password=password,
+                                          host='138.197.120.158',
+                                          port=3306,
+                                          database='test_db')
+            cursor = cnx.cursor()
+        except Exception as e:
+            print(e)
 
         # Get the user id from the users table
-
-        user_id = \
-        requests.get("http://138.197.104.32:8765/api/user", headers={'Authorization': f'Bearer {token}'}).json()['id']
+        response = requests.get("http://138.197.104.32:8765/api/user", headers={'Authorization': f'Bearer {token}'})
+        if response.status_code == 200:
+            user_id = response.json().get('id')
+        else:
+            # Log the error or send back a response indicating the failure
+            print(f"Failed to get user id, status code: {response.status_code}")
+            return jsonify(
+                message=f"An error occurred while retrieving user data, status code: {response.status_code}"), 500
+        print("user id")
         # Insert the map string into the database
         cursor.execute("INSERT INTO ocean (ocean_string, user_id) VALUES (%s, %s)", (map_string, user_id))
         cnx.commit()
-
+        print("map in db")
         # Close the database connection
         cnx.close()
 
@@ -124,6 +134,47 @@ def get_map(id):
         else:
             return jsonify(message='Maps not found'), 404
 
+
+@app.route('/server2/delete_map/<delete_id>', methods=['DELETE'])
+@token_required
+def delete_map(delete_id, token):
+    cnx = mysql.connector.connect(user=username, password=password,
+                                  host='138.197.120.158',
+                                  port=3306,
+                                  database='test_db')
+    cursor = cnx.cursor()
+    response = requests.get("http://138.197.104.32:8765/api/user", headers={'Authorization': f'Bearer {token}'})
+    if response.status_code == 200:
+        user_id = response.json().get('id')
+    else:
+        # Log the error or send back a response indicating the failure
+        print(f"Failed to get user id, status code: {response.status_code}")
+        return jsonify(
+            message=f"An error occurred while retrieving user data, status code: {response.status_code}"), 500
+    cursor.execute("SELECT ocean_id FROM ocean WHERE user_id = %s", (user_id,))
+    db_ocean_id = cursor.fetchall()
+    print("delete_id:", delete_id)
+    print("db_ocean_id:", db_ocean_id)
+    print("type of delete_id:", type(delete_id))
+    print("type of db_ocean_id[0]:", type(db_ocean_id[0][0]))
+
+    if cursor.rowcount == 0:
+        return jsonify(message='Maps not found'), 404
+    delete_id = int(delete_id)
+    found = False
+    for row in db_ocean_id:
+        if delete_id == row[0]:
+            found = True
+            break
+
+    # Check if delete_id was found in db_ocean_id
+    if not found:
+        return jsonify(message='Map not found'), 404
+    #delete the ocean string from the database
+    cursor.execute("DELETE FROM ocean WHERE ocean_id = %s", (delete_id,))
+    cnx.commit()
+    cnx.close()
+    return jsonify(message='Map deleted successfully'), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
