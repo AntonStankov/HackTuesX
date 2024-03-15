@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/media/user/")
@@ -37,5 +37,48 @@ public class FollowController {
             followEntity.setFollower_id(user.getId());
             return followService.save(followEntity);
         }
+    }
+
+    @GetMapping("/following")
+    public List<User> following(HttpServletRequest httpServletRequest){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = userService.findByEmail(principal.getUsername());
+
+        List<FollowEntity> following = followService.findFollowing(user.getId());
+        List<User> users = new ArrayList<>();
+        User test = new User();
+        for (int i = 0; i < following.size(); i++){
+            test = userService.findById(following.get(i).getFollowed_id());
+            users.add(test);
+        }
+        return users;
+    }
+
+    @GetMapping("/followers")
+    public List<User> followers(HttpServletRequest httpServletRequest){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = userService.findByEmail(principal.getUsername());
+
+        List<FollowEntity> following = followService.findFollowers(user.getId());
+        List<User> users = new ArrayList<>();
+        User test = new User();
+        for (int i = 0; i < following.size(); i++){
+            test = userService.findById(following.get(i).getFollowed_id());
+            users.add(test);
+        }
+        return users;
+    }
+
+    @DeleteMapping("/remove_following/{followed_id}")
+    public boolean removeFollowing(@PathVariable Long followed_id, HttpServletRequest httpServletRequest){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = userService.findByEmail(principal.getUsername());
+
+
+         followService.removeFollowing(user.getId(), followed_id);
+         return true;
     }
 }
