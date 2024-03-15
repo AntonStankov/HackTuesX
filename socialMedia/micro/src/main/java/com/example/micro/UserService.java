@@ -22,7 +22,7 @@ public class UserService {
 
     public User findByEmail(String email) {
         try (Connection connection = dataSource.getConnection()) {
-            String sql = "SELECT u FROM users u WHERE u.email = ?";
+            String sql = "SELECT * FROM users WHERE email = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, email);
                 try (ResultSet resultSet = statement.executeQuery()) {
@@ -34,10 +34,10 @@ public class UserService {
                         user.setEmail(resultSet.getString("email"));
                         user.setName(resultSet.getString("name"));
                         user.setPassword(resultSet.getString("password"));
-                        user.setEmail_verified_at(resultSet.getTimestamp("email_verified_at"));
-                        user.setCreated_at(resultSet.getTimestamp("created_at"));
-                        user.setRemember_token(resultSet.getString("remember_token"));
-                        user.setUpdated_at(resultSet.getTimestamp("updated_at"));
+//                        user.setEmail_verified_at(resultSet.getTimestamp("email_verified_at"));
+//                        user.setCreated_at(resultSet.getTimestamp("created_at"));
+//                        user.setRemember_token(resultSet.getString("remember_token"));
+//                        user.setUpdated_at(resultSet.getTimestamp("updated_at"));
                         return user;
                     }
                 }
