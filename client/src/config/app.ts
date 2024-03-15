@@ -11,9 +11,9 @@ interface AppConfig {
 }
 
 export const appConfig: AppConfig = {
-	name: "client",
+	name: "Ocean Paint",
 	github: {
-		title: "client",
+		title: "Pcean Paint",
 		url: "https://github.com/AntonStankov/HackTuesX/client",
 	},
 	author: {

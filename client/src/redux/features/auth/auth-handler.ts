@@ -74,6 +74,13 @@ export const authHandlerSlice = createSlice({
 				state.following = action.payload.following;
 			}
 		);
+		builder.addMatcher(
+			authApiSlice.endpoints.logout.matchFulfilled,
+			(state) => {
+				state = authState;
+				localStorage.clear();
+			}
+		);
 	},
 });
 
