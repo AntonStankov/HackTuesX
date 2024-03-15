@@ -9,7 +9,6 @@ on:
 jobs:
     deploy:
         runs-on: ubuntu-latest
-
         defaults:
             run:
                 working-directory: ./client
@@ -29,7 +28,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "npm"
-
             - name: Install packages
               run: npm i
 

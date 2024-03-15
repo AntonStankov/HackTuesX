@@ -1,0 +1,32 @@
+server:
+  address: 0.0.0.0
+  port: 8765
+spring:
+  cloud:
+    gateway:
+#      default-filters:
+#        - name: CorsGlobalFilter
+      routes:
+        - id: server1-route
+          uri: ${SERVER1_ROUTE_URI:http://139.59.209.1:80}
+          predicates:
+            - Path=/api/**
+          filters:
+            - AddResponseHeader=X-Powered-By, DanSon Gateway Service
+        - id: server2-route
+          uri: ${SERVER2_ROUTE_URI:http://167.71.253.191:5000}
+          predicates:
+            - Path=/server2/**
+          filters:
+            - AddResponseHeader=X-Powered-By, DanSon Gateway Service
+
+environment:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
