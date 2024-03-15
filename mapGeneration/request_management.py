@@ -122,23 +122,23 @@ def get_map(id):
     cursor = cnx.cursor()
 
     if id:
-        cursor.execute("SELECT ocean_string, name FROM ocean WHERE ocean_id = %s", (id,))
+        cursor.execute("SELECT ocean_id, user_id, ocean_string, name FROM ocean WHERE ocean_id = %s", (id,))
         result = cursor.fetchone()
         cnx.close()
         if result:
-            return jsonify(ocean_string=result), 200
+            return jsonify(ocean_id=result[0], user_id=result[1], ocean_string=result[2], name=result[3]), 200
         else:
             return jsonify(message='Map not found'), 404
     else:
-        cursor.execute("SELECT ocean_string, name FROM ocean")
+        cursor.execute("SELECT ocean_id, user_id, ocean_string, name FROM ocean")
         results = cursor.fetchall()
         cnx.close()
         if results:
-            # Convert tuple results to a list of strings
-            ocean_strings = [result[0] for result in results]
-            return jsonify(ocean_strings=ocean_strings), 200
+            oceans = [{'ocean_id': result[0], 'user_id': result[1], 'ocean_string': result[2], 'name': result[3]} for result in results]
+            return jsonify(oceans=oceans), 200
         else:
             return jsonify(message='Maps not found'), 404
+
 
 @app.route('/server2/get_my_ocean', defaults={'ocean_id': None})
 @app.route('/server2/get_my_ocean/<ocean_id>', methods=['GET'])
