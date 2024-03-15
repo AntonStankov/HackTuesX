@@ -1,88 +1,130 @@
-// Profile.tsx
-import React from 'react';
-import PostStyle from '@/components/ui/post-style';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+	Dialog,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import { DialogHeader } from "@/components/ui/dialog";
 
 export default function Profile() {
-  return (
-    <div className="flex flex-col sm:flex-row space-y-4 gap-10">
-      <div className="flex flex-col space-y-4 max-w-[400px] w-full">
-        <p className="text-4xl font-bold">Saved Maps</p>
-        <PostStyle 
-          imageUrl="https://source.unsplash.com/random" 
-          imageAlt="Random Unsplash Image" 
-          accordionContent1="69" 
-          accordionContent2="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam
-          quae nemo enim, facilis deleniti quibusdam consequatur perferendis
-          corporis quaerat. Earum, consequatur nihil saepe deserunt fugiat
-          assumenda dignissimos eligendi ipsum quo."
-          accordionValue="item-1" 
-        />
-      </div>
-      <Tabs defaultValue="account" className="w-[400px]">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="password">Password</TabsTrigger>
-        </TabsList>
-        <TabsContent value="account">
-          <Card>
-            <CardHeader>
-              <CardTitle>Account</CardTitle>
-              <CardDescription>
-                Make changes to your account here. Click save when you're done.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" defaultValue="Pedro Duarte" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="username">Username</Label>
-                <Input id="username" defaultValue="@peduarte" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save changes</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-        <TabsContent value="password">
-          <Card>
-            <CardHeader>
-              <CardTitle>Password</CardTitle>
-              <CardDescription>
-                Change your password here. After saving, you'll be logged out.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="current">Current password</Label>
-                <Input id="current" type="password" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="new">New password</Label>
-                <Input id="new" type="password" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save password</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
+	// profile page like threads.net
+	return (
+		<div className="flex flex-col gap-4 max-w-3xl mx-auto p-4">
+			<div className="flex flex-col justify-between items-center">
+				<div className="flex justify-between items-center w-full">
+					<div className="flex flex-col gap-2">
+						<h1 className="text-2xl font-medium">Jakob Hoeg</h1>
+						<p className="text-sm text-zinc-300">@jakobhoeg</p>
+					</div>
+					<Avatar>
+						<AvatarImage
+							src="/LoggedInUser.jpg"
+							alt="Jakob Hoeg"
+							sizes="40"
+						/>
+						<AvatarFallback />
+					</Avatar>
+				</div>
+				<div className="flex items-center space-x-2 py-6">
+					<p className="text-sm text-gray-500 dark:text-gray-400">
+						0 simulations
+					</p>
+					<Dialog>
+						<DialogTrigger asChild>
+							<Button variant="link">28 followers</Button>
+						</DialogTrigger>
+						<DialogContent className="sm:max-w-md">
+							<DialogHeader>
+								<DialogTitle>Followers</DialogTitle>
+							</DialogHeader>
+							<div className="flex items-center space-x-2">
+								<Avatar>
+									<AvatarImage
+										src="/User1.png"
+										alt="Jane Doe"
+									/>
+									<AvatarFallback />
+								</Avatar>
+								<div>
+									<h1 className="text-2xl font-medium">
+										Jane Doe
+									</h1>
+									<p className="text-sm text-zinc-300">
+										@janedoe
+									</p>
+								</div>
+							</div>
+						</DialogContent>
+					</Dialog>
+					<Dialog>
+						<DialogTrigger asChild>
+							<Button variant="link">38 following</Button>
+						</DialogTrigger>
+						<DialogContent className="sm:max-w-md">
+							<DialogHeader>
+								<DialogTitle>Following</DialogTitle>
+							</DialogHeader>
+							<div className="flex items-center space-x-2">
+								<Avatar>
+									<AvatarImage
+										src="/User1.png"
+										alt="Jane Doe"
+									/>
+									<AvatarFallback />
+								</Avatar>
+								<div>
+									<h1 className="text-2xl font-medium">
+										Jane Doe
+									</h1>
+									<p className="text-sm text-zinc-300">
+										@janedoe
+									</p>
+								</div>
+							</div>
+						</DialogContent>
+					</Dialog>
+				</div>
+				<Dialog>
+					<DialogTrigger className="w-full">
+						<Button className="w-full" variant="outline">
+							Edit Profile
+						</Button>
+					</DialogTrigger>
+					<DialogContent>
+						<DialogHeader>
+							<DialogTitle>Edit Profile</DialogTitle>
+						</DialogHeader>
+						<Label htmlFor="name">Name</Label>
+						<Input id="name" type="text" />
+					</DialogContent>
+				</Dialog>
+			</div>
+			<Tabs>
+				<TabsList className="flex gap-8">
+					<TabsTrigger value="simulations">Simulations</TabsTrigger>
+					<TabsTrigger value="replies">Replies</TabsTrigger>
+					<TabsTrigger value="likes">Likes</TabsTrigger>
+					<TabsTrigger value="bookmarks">Bookmarks</TabsTrigger>
+				</TabsList>
+				<TabsContent value="simulations"></TabsContent>
+				<TabsContent value="Security">
+					<div>
+						<Label htmlFor="2fa">2FA</Label>
+						<Input id="2fa" type="text" />
+					</div>
+				</TabsContent>
+				<TabsContent value="Notifications">
+					<div>
+						<Label htmlFor="notifications">Notifications</Label>
+						<Input id="notifications" type="text" />
+					</div>
+				</TabsContent>
+			</Tabs>
+		</div>
+	);
 }
