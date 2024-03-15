@@ -53,7 +53,13 @@ const simulationSlice = createSlice({
 			action: { payload: { idx: number; value: string } }
 		) => {
 			// y*200+x
-			const map = state.map.split("");
+			const map = new Array(20000);
+			const mapArray = state.map.split("");
+
+			mapArray.forEach((value, index) => {
+				map[index] = value;
+			});
+
 			const stack = [action.payload.idx];
 			const target = map[action.payload.idx];
 			while (stack.length) {

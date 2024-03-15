@@ -2,7 +2,7 @@ import path from "path";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-const basenameProd = "/client";
+const basenameProd = "/ocean-spray";
 
 export default defineConfig(({ command }) => {
 	const isProd = command === "build";

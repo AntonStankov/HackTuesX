@@ -38,6 +38,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 
+import { useNavigate } from "react-router-dom";
+
 export default function Map() {
 	const [singleClickTimer, setSingleClickTimer] =
 		useState<NodeJS.Timeout | null>(null);
@@ -50,6 +52,7 @@ export default function Map() {
 	const showGrid = useAppSelector(selectShowGrid);
 
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		dispatch({ type: "simulation/generateMap" });
@@ -77,6 +80,17 @@ export default function Map() {
 		document.addEventListener("keydown", down);
 		return () => document.removeEventListener("keydown", down);
 	}, []);
+
+	useEffect(() => {
+		const down = (e: KeyboardEvent) => {
+			if (e.key === "t" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				window.location.href = "/new";
+			}
+		};
+		document.addEventListener("keydown", down);
+		return () => document.removeEventListener("keydown", down);
+	}, [navigate]);
 
 	function handleSquareClick(idx: number) {
 		if (singleClickTimer === null) {

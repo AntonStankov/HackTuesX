@@ -19,7 +19,7 @@ export default function Dashboard() {
 		<>
 			<PageHeader className="flex flex-col md:flex-row justify-between">
 				<PageHeaderHeading>Dashboard</PageHeaderHeading>
-				<Button onClick={() => navigate("/new")}>
+				<Button onClick={() => navigate("/dashboard/new")}>
 					<Plus />
 					<span
 						className="

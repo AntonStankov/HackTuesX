@@ -23,6 +23,10 @@ export const router = createBrowserRouter(
 					element: <Dashboard />,
 				},
 				{
+					path: "dashboard/new",
+					element: <CreateSimulation />,
+				},
+				{
 					path: "sample",
 					element: <Sample />,
 				},
@@ -33,10 +37,6 @@ export const router = createBrowserRouter(
 				{
 					path: "profile",
 					element: <Profile />,
-				},
-				{
-					path: "new",
-					element: <CreateSimulation />,
 				},
 			],
 		},
