@@ -172,6 +172,21 @@ foreach ($grid as $rowIndex => $row) {
         $nextChar = $row[$i + 1] ?? null;
         $nextNextChar = $row[$i + 2] ?? null;
 
+        switch($char){
+            case 'M':
+                $budget += 6;
+                break;
+            case 'N':
+                $budget += 10;
+                break;
+            case 'O':
+                $budget += 4;
+                break;
+            case 'P':
+                $budget += 1;
+                break;
+        }
+
         if ($char == 'K') {
             if ($nextChar == 'K') {
                 $counts['shark']++;
