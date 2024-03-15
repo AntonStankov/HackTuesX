@@ -108,8 +108,8 @@ MAP;
     $sharkLife = 0;
     $oceanCleaness = 100;
 
-    $shipProductivity = 50;
-    $rigProductivity = 50;
+    $shipProductivity = 0;
+    $rigProductivity = 0;
     
     //index
     $efficiency;
@@ -288,6 +288,13 @@ foreach ($grid as $rowIndex => $row) {
                     }else {
                         $oceanCleaness -= 5;
                     }
+
+                    if($char == 'T'|| $char == 'D'){
+                        $shipProductivity += 10;
+                    }else{
+                        $shipProductivity += 5;
+                    }
+
                     if (checkForFishAroundShip($grid, $rowIndex, $i - 2, 10, $fishCharacters)) {
                        // echo "Fish found around big ship $shipChar at ($rowIndex, $i - 2)\n";
                        $fishLife -= 5;
@@ -311,6 +318,13 @@ foreach ($grid as $rowIndex => $row) {
                     }else {
                         $oceanCleaness -= 5;
                     }
+
+                    if($char == 'E'|| $char == 'G'){
+                        $shipProductivity += 10;
+                    }else{
+                        $shipProductivity += 5;
+                    }
+                    
                     if (checkForFishAroundShip($grid, $rowIndex, $i - 1, 8, $fishCharacters)) {
                         //echo "Fish found around small ship $shipChar at ($rowIndex, $i - 1)\n";
                         $fishLife -= 3;
@@ -366,6 +380,12 @@ foreach ($grid as $rowIndex => $row) {
                 $grid[$rowIndex + 1][$colIndex + 1] == $char
             ) {
                 $oilRigsCounts[$char]++;
+                if($char == 'M'|| $char == 'N'){
+                    $rigProductivity += 10;
+                }else{
+                    $rigProductivity += 5;
+                }
+                
                 $fnearr = checkFishAroundRigs($grid, $rowIndex, $colIndex, $char, $fishCharacters);
                 if($fnearr == 0){
                     $fishLife += 5;
@@ -420,9 +440,13 @@ if($sharkLife < 0)$sharkLife = 0;
 if($sharkLife > 100)$sharkLife = 100;
 
 $ecology = ($fishLife + $sharkLife + $oceanCleaness)/3;
-
 echo"\necology :{$ecology}\n";
 
+$efficiency = ($shipProductivity + $rigProductivity)/2;
+echo"\nefficiency :{$efficiency}\n";
+
+echo"rig eff:{$rigProductivity}\n";
+echo"shipp eff:{$shipProductivity}\n";
 foreach ($counts as $entity => $count) {
 echo "{$entity}: {$count}\n";
 }
