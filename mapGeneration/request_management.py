@@ -93,7 +93,7 @@ def save_map(token):
             print(f"Failed to get user id, status code: {response.status_code}")
             return jsonify(
                 message=f"An error occurred while retrieving user data, status code: {response.status_code}"), 500
-        #print("user id")
+        # print("user id")
         # Insert the map string into the database
         cursor.execute("INSERT INTO ocean (ocean_string, user_id) VALUES (%s, %s)", (map_string, user_id))
         cnx.commit()
@@ -134,11 +134,10 @@ def get_map(id):
         else:
             return jsonify(message='Maps not found'), 404
 
-
-@app.route('/server2/get_my_ocean', methods=['GET'])
+@app.route('/server2/get_my_ocean', defaults={'ocean_id': None})
+@app.route('/server2/get_my_ocean/<ocean_id>', methods=['GET'])
 @token_required
-def get_my_ocean(token):
-
+def get_my_ocean(token, ocean_id):
     cnx = mysql.connector.connect(user=username, password=password,
                                   host='138.197.120.158',
                                   port=3306,
@@ -154,16 +153,23 @@ def get_my_ocean(token):
         print(f"Failed to get user id, status code: {response.status_code}")
         return jsonify(
             message=f"An error occurred while retrieving user data, status code: {response.status_code}"), 500
-
-    cursor.execute("SELECT ocean_string FROM ocean WHERE user_id = %s", (user_id,))
-    result = cursor.fetchall()
-    print("result " + str(result))
-    cnx.close()
-    if result:
-        return jsonify(ocean_string=result[0]), 200
+    if ocean_id:
+        cursor.execute("SELECT ocean_string FROM ocean WHERE ocean_id = %s AND user_id = %s", (ocean_id, user_id))
+        result = cursor.fetchone()
+        cnx.close()
+        if result:
+            return jsonify(ocean_string=result[0]), 200
+        else:
+            return jsonify(message='Map not found'), 404
     else:
-        return jsonify(message='Map not found'), 404
-
+        cursor.execute("SELECT ocean_string FROM ocean WHERE user_id = %s", (user_id,))
+        result = cursor.fetchall()
+        print("result " + str(result))
+        cnx.close()
+        if result:
+            return jsonify(ocean_string=result), 200
+        else:
+            return jsonify(message='Map not found'), 404
 
 
 @app.route('/server2/delete_map/<delete_id>', methods=['DELETE'])
@@ -197,11 +203,12 @@ def delete_map(delete_id, token):
     # Check if delete_id was found in db_ocean_id
     if not found:
         return jsonify(message='Map not found'), 404
-    #delete the ocean string from the database
+    # delete the ocean string from the database
     cursor.execute("DELETE FROM ocean WHERE ocean_id = %s", (delete_id,))
     cnx.commit()
     cnx.close()
     return jsonify(message='Map deleted successfully'), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -4,4 +4,3 @@ mysql-connector-python
 PyJWT
 jwt
 requests
-json
