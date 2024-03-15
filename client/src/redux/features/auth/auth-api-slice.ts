@@ -52,6 +52,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
 			query: () => ({
 				url: "api/auth/refresh",
 				method: "POST",
+				body: {
+					refresh_token: localStorage.getItem("refreshToken"),
+				},
 			}),
 		}),
 		getUser: builder.query<void, void>({

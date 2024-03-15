@@ -36,6 +36,7 @@ export const authHandlerSlice = createSlice({
 			(state, action) => {
 				state._refreshToken = action.payload.refresh_token;
 				state._token = action.payload.access_token;
+				state._refreshToken = action.payload.refresh_token;
 				state._expires = action.payload.expires_in;
 				localStorage.setItem("token", action.payload.access_token);
 				localStorage.setItem(
@@ -49,6 +50,7 @@ export const authHandlerSlice = createSlice({
 			(state, action) => {
 				state._token = action.payload.access_token;
 				state._expires = action.payload.expires_in;
+				state._refreshToken = action.payload.refresh_token;
 				localStorage.setItem("token", action.payload.access_token);
 				localStorage.setItem(
 					"refreshToken",
