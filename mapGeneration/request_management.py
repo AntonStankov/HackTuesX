@@ -37,6 +37,12 @@ def token_required(f):
 def generate_map(token):
     ocean = Ocean()
     ocean.generate_land()
+    try:
+        json_data = request.get_json()
+        ocean_name = json_data.get('ocean_name')
+    except Exception as e:
+        return jsonify(message=f"Error parsing JSON: {str(e)}"), 400
+
     # send and sql query to the database to write the ocean_string to the database
     cnx = mysql.connector.connect(user=username, password=password,
                                   host='138.197.120.158',
@@ -55,7 +61,7 @@ def generate_map(token):
         return jsonify(
             message=f"An error occurred while retrieving user data, status code: {response.status_code}"), 500
 
-    cursor.execute("INSERT INTO ocean (ocean_string, user_id) VALUES (%s, %s)", (ocean.convert_to_string(), user_id,))
+    cursor.execute("INSERT INTO ocean (ocean_string, user_id, name) VALUES (%s, %s, %s)", (ocean.convert_to_string(), user_id, ocean_name,))
     cnx.commit()
     cnx.close()
     print("ocean generated")
@@ -116,15 +122,15 @@ def get_map(id):
     cursor = cnx.cursor()
 
     if id:
-        cursor.execute("SELECT ocean_string FROM ocean WHERE ocean_id = %s", (id,))
+        cursor.execute("SELECT ocean_string, name FROM ocean WHERE ocean_id = %s", (id,))
         result = cursor.fetchone()
         cnx.close()
         if result:
-            return jsonify(ocean_string=result[0]), 200
+            return jsonify(ocean_string=result), 200
         else:
             return jsonify(message='Map not found'), 404
     else:
-        cursor.execute("SELECT ocean_string FROM ocean")
+        cursor.execute("SELECT ocean_string, name FROM ocean")
         results = cursor.fetchall()
         cnx.close()
         if results:
@@ -154,22 +160,23 @@ def get_my_ocean(token, ocean_id):
         return jsonify(
             message=f"An error occurred while retrieving user data, status code: {response.status_code}"), 500
     if ocean_id:
-        cursor.execute("SELECT ocean_string FROM ocean WHERE ocean_id = %s AND user_id = %s", (ocean_id, user_id))
+        cursor.execute("SELECT ocean_string, name FROM ocean WHERE ocean_id = %s AND user_id = %s", (ocean_id, user_id))
         result = cursor.fetchone()
         cnx.close()
         if result:
-            return jsonify(ocean_string=result[0]), 200
+            return jsonify(ocean_string=result[0], ocean_name=result[1]), 200
         else:
             return jsonify(message='Map not found'), 404
     else:
-        cursor.execute("SELECT ocean_string FROM ocean WHERE user_id = %s", (user_id,))
-        result = cursor.fetchall()
-        print("result " + str(result))
+        cursor.execute("SELECT ocean_string, name FROM ocean WHERE user_id = %s", (user_id,))
+        results = cursor.fetchall()
+        print("results " + str(results))
         cnx.close()
-        if result:
-            return jsonify(ocean_string=result), 200
+        if results:
+            oceans = [{'ocean_string': result[0], 'ocean_name': result[1]} for result in results]
+            return jsonify(oceans=oceans), 200
         else:
-            return jsonify(message='Map not found'), 404
+            return jsonify(message='Maps not found'), 404
 
 
 @app.route('/server2/delete_map/<delete_id>', methods=['DELETE'])
