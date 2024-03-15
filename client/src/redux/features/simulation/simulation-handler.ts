@@ -20,6 +20,8 @@ export enum Color {
 	WeakFish = "C",
 	PassiveFish = "F",
 	OilRig = "O",
+	SmallShip = "S",
+	LargeShip = "B",
 }
 
 interface TileConstruction {
@@ -46,6 +48,8 @@ const initialState: MapState = {
 // Sharks are gonna be 1x2 squares
 // Fish are gonna be 1x1 squares
 // Water is gonna be 1x1 squares
+// Small Ships are gonna be 1x3 squares
+// Big Ships are gonna be 1x4 squares
 
 const simulationSlice = createSlice({
 	name: "simulation",
@@ -105,6 +109,27 @@ const simulationSlice = createSlice({
 					tileConstruction = {
 						tilesIdxs: [action.payload.idx],
 						color: Color.PassiveFish,
+					};
+					break;
+				case Color.SmallShip:
+					tileConstruction = {
+						tilesIdxs: [
+							action.payload.idx,
+							action.payload.idx + 1,
+							action.payload.idx + 2,
+						],
+						color: Color.SmallShip,
+					};
+					break;
+				case Color.LargeShip:
+					tileConstruction = {
+						tilesIdxs: [
+							action.payload.idx,
+							action.payload.idx + 1,
+							action.payload.idx + 2,
+							action.payload.idx + 3,
+						],
+						color: Color.LargeShip,
 					};
 					break;
 				default:

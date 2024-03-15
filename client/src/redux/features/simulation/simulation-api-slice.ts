@@ -1,5 +1,4 @@
 import { apiSlice } from "@/redux/api/api-slice";
-import type { RootState } from "@/redux/store";
 
 interface AnalyticsRequest {
 	inputMap: string;
@@ -17,8 +16,13 @@ export interface AnalyticsResponse {
 	rigProductivity: number;
 }
 
+interface Ocean {
+	ocean_name: string;
+	ocean_map: string;
+}
+
 export interface MyOceans {
-	ocean_string: string[][];
+	oceans: Ocean[];
 }
 export const analyticsApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
@@ -31,10 +35,11 @@ export const analyticsApiSlice = apiSlice.injectEndpoints({
 				},
 			}),
 		}),
-		generateMap: builder.mutation<void, void>({
-			query: () => ({
+		generateMap: builder.mutation<void, { ocean_name: string }>({
+			query: ({ ocean_name }) => ({
 				url: "server2/generate",
 				method: "POST",
+				body: {},
 			}),
 		}),
 		saveMap: builder.mutation<void, string>({
@@ -47,7 +52,7 @@ export const analyticsApiSlice = apiSlice.injectEndpoints({
 			}),
 		}),
 		getMySimulations: builder.query<MyOceans, void>({
-			query: () => "server2/get_my_ocean_maps",
+			query: () => "server2/get_my_ocean",
 		}),
 
 		deleteMap: builder.mutation<void, string>({

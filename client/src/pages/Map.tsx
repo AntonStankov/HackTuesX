@@ -58,6 +58,16 @@ const tileTypes: Tile[] = [
 	},
 	{ color: "bg-primary", label: "Oil Rig", colorLetter: Color.OilRig },
 	{ color: "bg-blue-500", label: "Water", colorLetter: Color.Water },
+	{
+		color: "bg-slate-500",
+		label: "Small Ship",
+		colorLetter: Color.SmallShip,
+	},
+	{
+		color: "bg-slate-700",
+		label: "Large Ship",
+		colorLetter: Color.LargeShip,
+	},
 ];
 
 export default function Map() {
@@ -155,6 +165,12 @@ export default function Map() {
 			case Color.OilRig:
 				return "bg-black-500";
 			case Color.Water:
+				return "bg-blue-500";
+			case Color.SmallShip:
+				return "bg-slate-500";
+			case Color.LargeShip:
+				return "bg-slate-700";
+			default:
 				return "bg-blue-500";
 		}
 	}
