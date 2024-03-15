@@ -13,6 +13,9 @@ jobs:
             run:
                 working-directory: ./client
 
+        defaults:
+            run:
+                working-directory: ./app
         permissions:
             contents: write
 
