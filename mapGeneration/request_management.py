@@ -59,7 +59,7 @@ def generate_map(token):
     cnx.commit()
     cnx.close()
     print("ocean generated")
-    return ocean.convert_to_string()
+    return ocean.convert_to_json(), 200
 
 
 @app.route('/server2/save_map', methods=['POST'])

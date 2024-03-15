@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import json
 
 class Ocean:
     width = 200
@@ -47,6 +47,12 @@ class Ocean:
             ocean_string += '\n'  # Add newline after each row
         return ocean_string
 
+    #conver to json
+    def convert_to_json(self):
+        ocean_json = {
+            "ocean_map": self.convert_to_string()
+        }
+        return json.dumps(ocean_json)
 
 #Example usage:
 # ocean = Ocean()
