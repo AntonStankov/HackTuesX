@@ -1,14 +1,17 @@
 name: Deploy Client
 
-# on:
-#     workflow_dispatch:
 on:
-    push:
-        branches: ["development"]
+    workflow_dispatch:
+# on:
+#     push:
+#         branches: ["development"]
 
 jobs:
     deploy:
         runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ./client
 
         permissions:
             contents: write
@@ -18,9 +21,6 @@ jobs:
                 node-version: ["20.9.0"]
 
         steps:
-            - name: CD into client
-              run: cd client
-
             - name: Checkout
               uses: actions/checkout@v3
 
