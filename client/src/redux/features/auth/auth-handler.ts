@@ -5,16 +5,22 @@ interface InitialState {
 	_token: string;
 	_refreshToken: string;
 	_expires: number;
+	id: number;
 	email: string;
 	name: string;
+	followers: number;
+	following: number;
 }
 
 const authState: InitialState = {
 	_token: localStorage.getItem("token") || "",
 	_refreshToken: localStorage.getItem("refreshToken") || "",
 	_expires: 0,
+	id: 0,
 	email: "",
 	name: "",
+	followers: 0,
+	following: 0,
 };
 
 export const authHandlerSlice = createSlice({
@@ -56,6 +62,16 @@ export const authHandlerSlice = createSlice({
 					"refreshToken",
 					action.payload.refresh_token
 				);
+			}
+		);
+		builder.addMatcher(
+			authApiSlice.endpoints.getUser.matchFulfilled,
+			(state, action) => {
+				state.id = action.payload.id;
+				state.email = action.payload.email;
+				state.name = action.payload.name;
+				state.followers = action.payload.followers;
+				state.following = action.payload.following;
 			}
 		);
 	},

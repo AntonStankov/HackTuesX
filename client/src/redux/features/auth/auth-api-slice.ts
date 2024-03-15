@@ -18,6 +18,16 @@ export interface RegisterRequest {
 	name: string;
 }
 
+export interface User {
+	id: number;
+	email: string;
+	name: string;
+	created_at: string;
+	updated_at: string;
+	followers: number;
+	following: number;
+}
+
 export const authApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		login: builder.mutation<LoginResponse, LoginRequest>({
@@ -33,7 +43,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
 		register: builder.mutation<LoginResponse, RegisterRequest>({
 			query: ({ email, password, name }) => ({
 				url: "api/auth/register",
-				// add no cors
 				method: "POST",
 				body: {
 					email,
@@ -57,10 +66,34 @@ export const authApiSlice = apiSlice.injectEndpoints({
 				},
 			}),
 		}),
-		getUser: builder.query<any, void>({
+		getUser: builder.query<User, void>({
 			query: () => ({
 				url: "media/user",
 				method: "GET",
+			}),
+		}),
+		followUser: builder.mutation<void, { id: number }>({
+			query: ({ id }) => ({
+				url: `media/user/follow/${id}`,
+				method: "POST",
+			}),
+		}),
+		getFollowers: builder.query<User[], void>({
+			query: () => ({
+				url: "media/user/followers",
+				method: "GET",
+			}),
+		}),
+		getFollowing: builder.query<User[], void>({
+			query: () => ({
+				url: "media/user/following",
+				method: "GET",
+			}),
+		}),
+		removeFollow: builder.mutation<void, { id: number }>({
+			query: ({ id }) => ({
+				url: `media/user/remove_following/${id}`,
+				method: "DELETE",
 			}),
 		}),
 	}),
@@ -73,4 +106,8 @@ export const {
 	useLogoutMutation,
 	useRefreshTokenMutation,
 	useGetUserQuery,
+	useFollowUserMutation,
+	useLazyGetFollowersQuery,
+	useLazyGetFollowingQuery,
+	useRemoveFollowMutation,
 } = authApiSlice;
