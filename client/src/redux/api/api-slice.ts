@@ -4,7 +4,7 @@ import { authApiSlice } from "@/redux/features/auth/auth-api-slice";
 import { RootState } from "@/redux/store";
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: "http://138.197.104.32:8765/api",
+	baseUrl: "https://api.ocean-paint.net/",
 	prepareHeaders: (headers, { getState }) => {
 		const token = (getState() as RootState).auth._token;
 		if (token) {
