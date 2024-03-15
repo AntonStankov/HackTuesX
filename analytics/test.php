@@ -103,6 +103,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 MAP;
 
+    $fishLife;
+    $sharkLife;
+    $oceanPollution;
+
+    $shipProductivity;
+    $rigProductivity;
+
+    $budget;
 
     $mapRows = explode("\n", trim($inputMap));
     $grid = array_map(function($row) {
@@ -203,6 +211,32 @@ function checkFishAroundRigs($grid, $rigRow, $rigCol, $rigType, $fishCharacters)
         } else {
             echo "Fish found near hazardous rig $rigType at ($rigRow, $rigCol). This is dangerous for them.\n";
         }
+    }
+}
+
+function fishRatio($counts) {
+    $fishX = $counts['fishX'];
+    $fishC = $counts['fishC'];
+    $fishF = $counts['fishF'];
+
+    $totalFish = $fishX + $fishC + $fishF;
+
+    if ($totalFish == 0) {
+        return "No fish found.";
+    }
+
+    $ratioX = $fishX / $totalFish;
+    $ratioC = $fishC / $totalFish;
+    $ratioF = $fishF / $totalFish;
+
+    $idealRatio = 1/3;
+
+    $tolerance = 0.2; // 20%
+
+    if (abs($ratioX - $idealRatio) <= $tolerance && abs($ratioC - $idealRatio) <= $tolerance && abs($ratioF - $idealRatio) <= $tolerance) {
+        return "The ratio is close to 1:1:1. Good balance of fish types.";
+    } else {
+        return "The ratio is too far from 1:1:1. Imbalance in fish types.";
     }
 }
 
@@ -312,6 +346,8 @@ foreach ($grid as $rowIndex => $row) {
 foreach ($oilRigsCounts as $rigType => $count) {
     echo "{$rigType} rigs: {$count}\n";
 }
+
+echo fishRatio($counts);
 
 if ($isCorrupted) {
 echo "Error: The map is corrupted.\n";

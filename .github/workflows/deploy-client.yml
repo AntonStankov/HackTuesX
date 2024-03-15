@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Deploy Client
 
 # on:
 #     workflow_dispatch:
@@ -18,6 +18,9 @@ jobs:
                 node-version: ["20.9.0"]
 
         steps:
+            - name: CD into client
+              run: cd client
+
             - name: Checkout
               uses: actions/checkout@v3
 
@@ -26,7 +29,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "npm"
-
             - name: Install packages
               run: npm i
 

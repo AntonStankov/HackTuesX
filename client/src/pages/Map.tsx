@@ -38,6 +38,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 
+import { useNavigate } from "react-router-dom";
+
 export default function Map() {
 	const [singleClickTimer, setSingleClickTimer] =
 		useState<NodeJS.Timeout | null>(null);
@@ -50,10 +52,45 @@ export default function Map() {
 	const showGrid = useAppSelector(selectShowGrid);
 
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		dispatch({ type: "simulation/generateMap" });
 	}, []);
+
+	useEffect(() => {
+		const down = (e: KeyboardEvent) => {
+			if (e.key === "z" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				dispatch(undoAction());
+			}
+		};
+
+		document.addEventListener("keydown", down);
+		return () => document.removeEventListener("keydown", down);
+	}, []);
+
+	useEffect(() => {
+		const down = (e: KeyboardEvent) => {
+			if (e.key === "y" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				dispatch(redoAction());
+			}
+		};
+		document.addEventListener("keydown", down);
+		return () => document.removeEventListener("keydown", down);
+	}, []);
+
+	useEffect(() => {
+		const down = (e: KeyboardEvent) => {
+			if (e.key === "t" && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				window.location.href = "/new";
+			}
+		};
+		document.addEventListener("keydown", down);
+		return () => document.removeEventListener("keydown", down);
+	}, [navigate]);
 
 	function handleSquareClick(idx: number) {
 		if (singleClickTimer === null) {
@@ -126,7 +163,7 @@ export default function Map() {
 					</ContextMenu>
 				</TransformComponent>
 			</TransformWrapper>
-			<div className="flex justify-center absolute bottom-0 right-0">
+			<div className="absolute bottom-5 right-5 p-4 space-x-4">
 				<div className="flex space-x-2">
 					<Button
 						onClick={() => dispatch(changeColor("A"))}
