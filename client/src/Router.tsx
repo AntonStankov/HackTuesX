@@ -12,6 +12,8 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import CreateSimulation from "./pages/CreateSimulation";
 import Chat from "./pages/Chat";
+import ProtectedLayout from "./components/layouts/ProtectedLayout";
+import AuthenticatedLayout from "./components/layouts/AuthenticatedLayout";
 
 export const router = createBrowserRouter(
 	[
@@ -20,12 +22,18 @@ export const router = createBrowserRouter(
 			element: <Applayout />,
 			children: [
 				{
-					path: "dashboard",
-					element: <Dashboard />,
-				},
-				{
-					path: "dashboard/new",
-					element: <CreateSimulation />,
+					path: "",
+					element: <ProtectedLayout />,
+					children: [
+						{
+							path: "dashboard",
+							element: <Dashboard />,
+						},
+						{
+							path: "dashboard/new",
+							element: <CreateSimulation />,
+						},
+					],
 				},
 				{
 					path: "sample",
@@ -50,12 +58,18 @@ export const router = createBrowserRouter(
 			element: <Map />,
 		},
 		{
-			path: "login",
-			element: <Login />,
-		},
-		{
-			path: "register",
-			element: <Register />,
+			path: "",
+			element: <AuthenticatedLayout />,
+			children: [
+				{
+					path: "login",
+					element: <Login />,
+				},
+				{
+					path: "register",
+					element: <Register />,
+				},
+			],
 		},
 		{
 			path: "*",

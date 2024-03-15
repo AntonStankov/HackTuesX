@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { authApiSlice } from "./auth-api-slice";
-
+import type { RootState } from "@/redux/store";
 interface InitialState {
 	_token: string;
 	_refreshToken: string;
@@ -62,5 +62,7 @@ export const authHandlerSlice = createSlice({
 });
 
 export const { setToken, logOut } = authHandlerSlice.actions;
+
+export const selectToken = (state: RootState) => state.auth._token;
 
 export default authHandlerSlice;
