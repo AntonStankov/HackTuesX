@@ -1,4 +1,4 @@
-package com.example.micro.service;
+package com.example.micro.service.follow;
 
 import com.example.micro.entity.FollowEntity;
 import jakarta.transaction.Transactional;
@@ -25,4 +25,6 @@ public interface FollowRepo extends JpaRepository<FollowEntity, Long> {
     @Modifying
     @Query("DELETE FROM FollowEntity f WHERE f.follower_id = :my_id AND f.followed_id = :followedId")
     void removeFollowing(Long my_id, Long followedId);
+
+
 }

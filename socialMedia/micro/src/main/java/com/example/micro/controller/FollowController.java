@@ -1,8 +1,10 @@
-package com.example.micro;
+package com.example.micro.controller;
 
 
+import com.example.micro.User;
+import com.example.micro.UserService;
 import com.example.micro.entity.FollowEntity;
-import com.example.micro.service.FollowService;
+import com.example.micro.service.follow.FollowService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -80,5 +82,40 @@ public class FollowController {
 
          followService.removeFollowing(user.getId(), followed_id);
          return true;
+    }
+
+
+
+
+    @GetMapping("/following/{user_id}")
+    public List<User> foreignFollowing(@PathVariable Long user_id, HttpServletRequest httpServletRequest){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = userService.findByEmail(principal.getUsername());
+
+        List<FollowEntity> following = followService.findFollowing(user_id);
+        List<User> users = new ArrayList<>();
+        User test = new User();
+        for (int i = 0; i < following.size(); i++){
+            test = userService.findById(following.get(i).getFollowed_id());
+            users.add(test);
+        }
+        return users;
+    }
+
+    @GetMapping("/followers/{user_id}")
+    public List<User> foreignFollowers(@PathVariable Long user_id, HttpServletRequest httpServletRequest){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = userService.findByEmail(principal.getUsername());
+
+        List<FollowEntity> following = followService.findFollowers(user_id);
+        List<User> users = new ArrayList<>();
+        User test = new User();
+        for (int i = 0; i < following.size(); i++){
+            test = userService.findById(following.get(i).getFollowed_id());
+            users.add(test);
+        }
+        return users;
     }
 }

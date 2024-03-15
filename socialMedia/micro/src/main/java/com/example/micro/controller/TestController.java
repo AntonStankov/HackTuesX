@@ -1,4 +1,4 @@
-package com.example.micro;
+package com.example.micro.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpEntity;

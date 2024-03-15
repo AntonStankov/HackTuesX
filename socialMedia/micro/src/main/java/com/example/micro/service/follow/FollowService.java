@@ -1,4 +1,4 @@
-package com.example.micro.service;
+package com.example.micro.service.follow;
 
 import com.example.micro.entity.FollowEntity;
 import org.springframework.stereotype.Service;
