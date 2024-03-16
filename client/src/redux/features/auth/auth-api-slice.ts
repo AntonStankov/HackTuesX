@@ -10,6 +10,7 @@ export interface LoginResponse {
 	refresh_token: string;
 	token_type: string;
 	expires_in: number;
+	email: string;
 }
 
 export interface RegisterRequest {
@@ -72,6 +73,12 @@ export const authApiSlice = apiSlice.injectEndpoints({
 				method: "GET",
 			}),
 		}),
+		getPersonProfile: builder.query<User, { email: string }>({
+			query: ({ email }) => ({
+				url: `media/user/${email}`,
+				method: "GET",
+			}),
+		}),
 		followUser: builder.mutation<void, { id: number }>({
 			query: ({ id }) => ({
 				url: `media/user/follow/${id}`,
@@ -106,6 +113,7 @@ export const {
 	useLogoutMutation,
 	useRefreshTokenMutation,
 	useGetUserQuery,
+	useGetPersonProfileQuery,
 	useFollowUserMutation,
 	useLazyGetFollowersQuery,
 	useLazyGetFollowingQuery,

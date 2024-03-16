@@ -49,6 +49,7 @@ export const authHandlerSlice = createSlice({
 					"refreshToken",
 					action.payload.refresh_token
 				);
+				state.email = action.payload.email;
 			}
 		);
 		builder.addMatcher(
@@ -62,6 +63,7 @@ export const authHandlerSlice = createSlice({
 					"refreshToken",
 					action.payload.refresh_token
 				);
+				state.email = action.payload.email;
 			}
 		);
 		builder.addMatcher(

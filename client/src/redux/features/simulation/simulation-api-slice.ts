@@ -39,7 +39,9 @@ export const analyticsApiSlice = apiSlice.injectEndpoints({
 			query: ({ ocean_name }) => ({
 				url: "server2/generate",
 				method: "POST",
-				body: {},
+				body: {
+					ocean_name,
+				},
 			}),
 		}),
 		saveMap: builder.mutation<void, string>({
