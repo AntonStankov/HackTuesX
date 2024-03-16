@@ -1,0 +1,6 @@
+Flask
+matplotlib
+mysql-connector-python
+PyJWT
+jwt
+requests
