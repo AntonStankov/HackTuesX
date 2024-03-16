@@ -30,7 +30,7 @@ const schema = z
 			message:
 				"Username must only contain letters and numbers, no spaces or special characters",
 		}),
-
+		name: z.string().nonempty(),
 		email: z.string().email(),
 		password: z
 			.string()
@@ -72,7 +72,8 @@ export function RegisterForm({ className, ...props }: UserRegisterFormProps) {
 			await signUp({
 				email: data.email,
 				password: data.password,
-				name: data.username,
+				name: data.name,
+				username: data.username,
 			}).unwrap();
 
 			toast({
@@ -116,6 +117,32 @@ export function RegisterForm({ className, ...props }: UserRegisterFormProps) {
 										</FormControl>
 										<FormMessage>
 											{formState.errors.username?.message}
+										</FormMessage>
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="name"
+								render={({ field, formState }) => (
+									<FormItem>
+										<FormLabel className="sr-only">
+											Name
+										</FormLabel>
+										<FormControl>
+											<Input
+												id="name"
+												placeholder="Name"
+												type="text"
+												autoCapitalize="none"
+												autoComplete="name"
+												autoCorrect="off"
+												disabled={isLoading}
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage>
+											{formState.errors.name?.message}
 										</FormMessage>
 									</FormItem>
 								)}

@@ -10,19 +10,21 @@ export interface LoginResponse {
 	refresh_token: string;
 	token_type: string;
 	expires_in: number;
-	email: string;
+	username: string;
 }
 
 export interface RegisterRequest {
 	email: string;
 	password: string;
 	name: string;
+	username: string;
 }
 
 export interface User {
 	id: number;
 	email: string;
 	name: string;
+	username: string;
 	created_at: string;
 	updated_at: string;
 	followers: number;
@@ -42,13 +44,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
 			}),
 		}),
 		register: builder.mutation<LoginResponse, RegisterRequest>({
-			query: ({ email, password, name }) => ({
+			query: ({ email, password, name, username }) => ({
 				url: "api/auth/register",
 				method: "POST",
 				body: {
 					email,
 					password,
 					name,
+					username,
 				},
 			}),
 		}),
@@ -73,9 +76,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
 				method: "GET",
 			}),
 		}),
-		getPersonProfile: builder.query<User, { email: string }>({
-			query: ({ email }) => ({
-				url: `media/user/${email}`,
+		getPersonProfile: builder.query<User, { username: string }>({
+			query: ({ username }) => ({
+				url: `media/getProfile/${username}`,
 				method: "GET",
 			}),
 		}),

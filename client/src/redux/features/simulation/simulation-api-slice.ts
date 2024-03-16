@@ -16,7 +16,7 @@ export interface AnalyticsResponse {
 	rigProductivity: number;
 }
 
-interface Ocean {
+export interface Ocean {
 	ocean_name: string;
 	ocean_map: string;
 }
@@ -28,7 +28,7 @@ export const analyticsApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		getAnalytics: builder.query<AnalyticsResponse, AnalyticsRequest>({
 			query: ({ inputMap }) => ({
-				url: "api/analyze-map",
+				url: "laravel2/api/analyze-map",
 				method: "POST",
 				body: {
 					inputMap,

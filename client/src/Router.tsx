@@ -44,7 +44,8 @@ export const router = createBrowserRouter(
 					element: <Empty />,
 				},
 				{
-					path: "profile",
+					// add slug
+					path: ":username",
 					element: <Profile />,
 				},
 				{

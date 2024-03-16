@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/accordion";
 
 import {
-	useGetUserQuery,
+	useGetPersonProfileQuery,
 	useLogoutMutation,
 } from "@/redux/features/auth/auth-api-slice";
 
@@ -34,13 +34,17 @@ import { useNavigate } from "react-router-dom";
 
 import { Skeleton } from "../ui/skeleton";
 
+import { useAppSelector } from "@/redux/hooks";
+import { selectUsername } from "@/redux/features/auth/auth-handler";
+
 export function Header() {
 	const [open, setOpen] = useState(false);
 	const location = useLocation();
 	const navigate = useNavigate();
 
+	const username = useAppSelector(selectUsername);
 	const [logout] = useLogoutMutation();
-	const { data, isLoading } = useGetUserQuery();
+	const { data, isLoading } = useGetPersonProfileQuery({ username });
 
 	return (
 		<header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur">
@@ -333,7 +337,7 @@ export function Header() {
 												{data?.name}
 											</p>
 											<p className="text-xs leading-none text-muted-foreground">
-												@{data?.email.split("@")[0]}
+												@{data?.username}
 											</p>
 										</div>
 									)}
@@ -341,7 +345,7 @@ export function Header() {
 								<DropdownMenuSeparator />
 								<DropdownMenuItem
 									onClick={() => {
-										navigate("/profile");
+										navigate(`/${data?.username}`);
 									}}
 								>
 									Profile

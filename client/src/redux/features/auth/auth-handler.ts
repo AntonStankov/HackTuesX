@@ -8,6 +8,7 @@ interface InitialState {
 	id: number;
 	email: string;
 	name: string;
+	username: string;
 	followers: number;
 	following: number;
 }
@@ -21,6 +22,7 @@ const authState: InitialState = {
 	name: "",
 	followers: 0,
 	following: 0,
+	username: localStorage.getItem("username") || "",
 };
 
 export const authHandlerSlice = createSlice({
@@ -49,7 +51,8 @@ export const authHandlerSlice = createSlice({
 					"refreshToken",
 					action.payload.refresh_token
 				);
-				state.email = action.payload.email;
+				state.email = action.payload.username;
+				localStorage.setItem("username", action.payload.username);
 			}
 		);
 		builder.addMatcher(
@@ -63,17 +66,30 @@ export const authHandlerSlice = createSlice({
 					"refreshToken",
 					action.payload.refresh_token
 				);
-				state.email = action.payload.email;
+				state.email = action.payload.username;
+				localStorage.setItem("username", action.payload.username);
 			}
 		);
 		builder.addMatcher(
-			authApiSlice.endpoints.getUser.matchFulfilled,
+			authApiSlice.endpoints.getPersonProfile.matchFulfilled,
 			(state, action) => {
 				state.id = action.payload.id;
 				state.email = action.payload.email;
 				state.name = action.payload.name;
 				state.followers = action.payload.followers;
 				state.following = action.payload.following;
+				state.username = action.payload.username;
+			}
+		);
+		builder.addMatcher(
+			authApiSlice.endpoints.getPersonProfile.matchFulfilled,
+			(state, action) => {
+				state.id = action.payload.id;
+				state.email = action.payload.email;
+				state.name = action.payload.name;
+				state.followers = action.payload.followers;
+				state.following = action.payload.following;
+				state.username = action.payload.username;
 			}
 		);
 		builder.addMatcher(
@@ -89,5 +105,6 @@ export const authHandlerSlice = createSlice({
 export const { setToken, logOut } = authHandlerSlice.actions;
 
 export const selectToken = (state: RootState) => state.auth._token;
+export const selectUsername = (state: RootState) => state.auth.username;
 
 export default authHandlerSlice;

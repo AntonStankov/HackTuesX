@@ -13,13 +13,20 @@ import {
 
 import {
 	User,
-	useGetUserQuery,
+	useFollowUserMutation,
+	useRemoveFollowMutation,
+	useGetPersonProfileQuery,
 	useLazyGetFollowersQuery,
 	useLazyGetFollowingQuery,
 } from "@/redux/features/auth/auth-api-slice";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
+
+import { useParams } from "react-router-dom";
+
+import { useAppSelector } from "@/redux/hooks";
+import { selectUsername } from "@/redux/features/auth/auth-handler";
 
 const ProfileCard = ({ user }: { user: User }) => {
 	return (
@@ -39,7 +46,14 @@ const ProfileCard = ({ user }: { user: User }) => {
 };
 
 export default function Profile() {
-	// profile page like threads.net
+	const { username } = useParams<{ username: string }>() as {
+		username: string;
+	};
+
+	const usernameProfile = useAppSelector(selectUsername);
+	const [followUser] = useFollowUserMutation();
+	const [removeFollow] = useRemoveFollowMutation();
+
 	const [
 		triggerFollowers,
 		{ data: resultFollowers, isLoading: isLoadingFollowers },
@@ -49,8 +63,10 @@ export default function Profile() {
 		{ data: resultFollowing, isLoading: isLoadingFollowing },
 	] = useLazyGetFollowingQuery();
 
-	const { data, isLoading } = useGetUserQuery();
-	if (isLoading)
+	const { data: profile, isLoading: isLoadingProfile } =
+		useGetPersonProfileQuery({ username });
+
+	if (isLoadingProfile)
 		return (
 			<div className="flex flex-col gap-4 max-w-3xl mx-auto p-4">
 				<div className="flex flex-col justify-between items-center">
@@ -81,9 +97,11 @@ export default function Profile() {
 			<div className="flex flex-col justify-between items-center">
 				<div className="flex justify-between items-center w-full">
 					<div className="flex flex-col gap-2">
-						<h1 className="text-2xl font-medium">{data?.name}</h1>
+						<h1 className="text-2xl font-medium">
+							{profile?.name}
+						</h1>
 						<p className="text-sm text-zinc-300">
-							@{data?.email.split("@")[0]}
+							@{profile?.email.split("@")[0]}
 						</p>
 					</div>
 					<Avatar>
@@ -107,7 +125,7 @@ export default function Profile() {
 									triggerFollowers();
 								}}
 							>
-								{data?.followers} followers
+								{profile?.followers} followers
 							</Button>
 						</DialogTrigger>
 						<DialogContent className="sm:max-w-md">
@@ -145,7 +163,7 @@ export default function Profile() {
 									triggerFollowing();
 								}}
 							>
-								{data?.following} following
+								{profile?.following} following
 							</Button>
 						</DialogTrigger>
 						<DialogContent className="sm:max-w-md">
@@ -176,20 +194,32 @@ export default function Profile() {
 						</DialogContent>
 					</Dialog>
 				</div>
-				<Dialog>
-					<DialogTrigger className="w-full">
-						<Button className="w-full" variant="outline">
-							Edit Profile
-						</Button>
-					</DialogTrigger>
-					<DialogContent>
-						<DialogHeader>
-							<DialogTitle>Edit Profile</DialogTitle>
-						</DialogHeader>
-						<Label htmlFor="name">Name</Label>
-						<Input id="name" type="text" />
-					</DialogContent>
-				</Dialog>
+				{profile?.username === usernameProfile ? (
+					<Dialog>
+						<DialogTrigger className="w-full">
+							<Button className="w-full" variant="outline">
+								Edit Profile
+							</Button>
+						</DialogTrigger>
+						<DialogContent>
+							<DialogHeader>
+								<DialogTitle>Edit Profile</DialogTitle>
+							</DialogHeader>
+							<Label htmlFor="name">Name</Label>
+							<Input id="name" type="text" />
+						</DialogContent>
+					</Dialog>
+				) : (
+					<Button
+						className="w-full"
+						variant="outline"
+						onClick={() =>
+							followUser({ id: profile?.id } as { id: number })
+						}
+					>
+						Follow
+					</Button>
+				)}
 			</div>
 			<Tabs>
 				<TabsList className="flex gap-8">

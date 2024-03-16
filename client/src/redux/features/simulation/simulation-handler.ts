@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { MyOceans, Ocean, analyticsApiSlice } from "./simulation-api-slice";
 import type { RootState } from "@/redux/store";
 
 function generateStringWithLength(length: number) {
@@ -29,6 +30,7 @@ interface TileConstruction {
 	color: Color;
 }
 interface MapState {
+	all_maps: Ocean[];
 	map: string; // 20000 characters of A, B, C
 	showGrid: boolean;
 	history: string[];
@@ -37,6 +39,7 @@ interface MapState {
 }
 
 const initialState: MapState = {
+	all_maps: [],
 	map: localStorage.getItem("map") || generateStringWithLength(20000),
 	showGrid: localStorage.getItem("showGrid") === "true",
 	history: [],
@@ -55,10 +58,8 @@ const simulationSlice = createSlice({
 	name: "simulation",
 	initialState,
 	reducers: {
-		generateMap: (state) => {
-			state.map = generateStringWithLength(20000);
-			state.history = [];
-			localStorage.setItem("map", state.map);
+		generateMap: (state, action: { payload: string }) => {
+			state.map = action.payload;
 		},
 		updateSquare: (
 			state,
@@ -198,6 +199,14 @@ const simulationSlice = createSlice({
 			}
 		},
 	},
+	extraReducers: (builder) => {
+		builder.addMatcher(
+			analyticsApiSlice.endpoints.getMySimulations.matchFulfilled,
+			(state, action) => {
+				state.all_maps = action.payload.oceans;
+			}
+		);
+	},
 });
 
 export const {
@@ -212,6 +221,7 @@ export const {
 } = simulationSlice.actions;
 
 export const selectMap = (state: RootState) => state.simulation.map;
+export const selectMaps = (state: RootState) => state.simulation.all_maps;
 export const selectShowGrid = (state: RootState) => state.simulation.showGrid;
 export const selectPickedColor = (state: RootState) =>
 	state.simulation.pickedColor;
