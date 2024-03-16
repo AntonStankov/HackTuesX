@@ -1,9 +1,5 @@
 import { apiSlice } from "@/redux/api/api-slice";
 
-interface AnalyticsRequest {
-	inputMap: string;
-}
-
 export interface AnalyticsResponse {
 	index: number;
 	ecology: number;
@@ -24,9 +20,10 @@ export interface Ocean {
 export interface MyOceans {
 	oceans: Ocean[];
 }
+
 export const analyticsApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
-		getAnalytics: builder.query<AnalyticsResponse, AnalyticsRequest>({
+		getAnalytics: builder.query<AnalyticsResponse, { inputMap: string }>({
 			query: ({ inputMap }) => ({
 				url: "laravel2/api/analyze-map",
 				method: "POST",
@@ -67,7 +64,7 @@ export const analyticsApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-	useGetAnalyticsQuery,
+	useLazyGetAnalyticsQuery,
 	useGenerateMapMutation,
 	useSaveMapMutation,
 	useGetMySimulationsQuery,

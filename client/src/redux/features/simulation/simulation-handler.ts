@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { MyOceans, Ocean, analyticsApiSlice } from "./simulation-api-slice";
 import type { RootState } from "@/redux/store";
 
 function generateStringWithLength(length: number) {
@@ -30,7 +29,6 @@ interface TileConstruction {
 	color: Color;
 }
 interface MapState {
-	all_maps: Ocean[];
 	map: string; // 20000 characters of A, B, C
 	showGrid: boolean;
 	history: string[];
@@ -39,7 +37,6 @@ interface MapState {
 }
 
 const initialState: MapState = {
-	all_maps: [],
 	map: localStorage.getItem("map") || generateStringWithLength(20000),
 	showGrid: localStorage.getItem("showGrid") === "true",
 	history: [],
@@ -48,7 +45,7 @@ const initialState: MapState = {
 };
 
 // Oil rigs are gonna be 4x4 squares
-// Sharks are gonna be 1x2 squares
+// Sharks are gonna be 2x1 squares
 // Fish are gonna be 1x1 squares
 // Water is gonna be 1x1 squares
 // Small Ships are gonna be 1x3 squares
@@ -58,8 +55,10 @@ const simulationSlice = createSlice({
 	name: "simulation",
 	initialState,
 	reducers: {
-		generateMap: (state, action: { payload: string }) => {
-			state.map = action.payload;
+		generateMap: (state) => {
+			state.map = generateStringWithLength(20000);
+			state.history = [];
+			localStorage.setItem("map", state.map);
 		},
 		updateSquare: (
 			state,
@@ -87,10 +86,7 @@ const simulationSlice = createSlice({
 					break;
 				case Color.Shark:
 					tileConstruction = {
-						tilesIdxs: [
-							action.payload.idx,
-							action.payload.idx + 200,
-						],
+						tilesIdxs: [action.payload.idx, action.payload.idx + 1],
 						color: Color.Shark,
 					};
 					break;
@@ -199,14 +195,6 @@ const simulationSlice = createSlice({
 			}
 		},
 	},
-	extraReducers: (builder) => {
-		builder.addMatcher(
-			analyticsApiSlice.endpoints.getMySimulations.matchFulfilled,
-			(state, action) => {
-				state.all_maps = action.payload.oceans;
-			}
-		);
-	},
 });
 
 export const {
@@ -221,7 +209,6 @@ export const {
 } = simulationSlice.actions;
 
 export const selectMap = (state: RootState) => state.simulation.map;
-export const selectMaps = (state: RootState) => state.simulation.all_maps;
 export const selectShowGrid = (state: RootState) => state.simulation.showGrid;
 export const selectPickedColor = (state: RootState) =>
 	state.simulation.pickedColor;
