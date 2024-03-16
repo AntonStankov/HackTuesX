@@ -78,7 +78,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 		}),
 		getPersonProfile: builder.query<User, { username: string }>({
 			query: ({ username }) => ({
-				url: `media/getProfile/${username}`,
+				url: `media/user/getProfile/${username}`,
 				method: "GET",
 			}),
 		}),

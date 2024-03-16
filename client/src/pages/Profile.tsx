@@ -81,7 +81,7 @@ export default function Profile() {
 								alt="Jakob Hoeg"
 								sizes="40"
 							/>
-							<AvatarFallback />
+							<AvatarFallback></AvatarFallback>
 						</Avatar>
 					</div>
 					<div className="flex items-center space-x-2 py-6">
@@ -110,7 +110,7 @@ export default function Profile() {
 							alt="Jakob Hoeg"
 							sizes="40"
 						/>
-						<AvatarFallback />
+						<AvatarFallback>{profile?.username[0]}</AvatarFallback>
 					</Avatar>
 				</div>
 				<div className="flex items-center space-x-2 py-6">
@@ -171,25 +171,23 @@ export default function Profile() {
 								<DialogTitle>Following</DialogTitle>
 							</DialogHeader>
 							<div className="flex flex-col gap-4">
-								<ScrollArea className="h-72 w-48 rounded-md border">
-									{isLoadingFollowing ? (
-										<div className="flex items-center space-x-4">
-											<Skeleton className="h-12 w-12 rounded-full" />
-											<div className="space-y-2">
-												<Skeleton className="h-4 w-[250px]" />
-												<Skeleton className="h-4 w-[200px]" />
-											</div>
+								{isLoadingFollowing ? (
+									<div className="flex items-center space-x-4">
+										<Skeleton className="h-12 w-12 rounded-full" />
+										<div className="space-y-2">
+											<Skeleton className="h-4 w-[250px]" />
+											<Skeleton className="h-4 w-[200px]" />
 										</div>
-									) : (
-										resultFollowing &&
-										resultFollowing.map((user) => (
-											<ProfileCard
-												key={user.id}
-												user={user}
-											/>
-										))
-									)}
-								</ScrollArea>
+									</div>
+								) : (
+									resultFollowing &&
+									resultFollowing.map((user) => (
+										<ProfileCard
+											key={user.id}
+											user={user}
+										/>
+									))
+								)}
 							</div>
 						</DialogContent>
 					</Dialog>

@@ -21,7 +21,7 @@ export enum Color {
 	PassiveFish = "F",
 	OilRig = "O",
 	SmallShip = "S",
-	LargeShip = "B",
+	LargeShip = "T",
 }
 
 interface TileConstruction {

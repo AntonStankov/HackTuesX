@@ -13,11 +13,11 @@ interface AppConfig {
 export const appConfig: AppConfig = {
 	name: "Ocean Paint",
 	github: {
-		title: "Pcean Paint",
+		title: "Ocean Paint",
 		url: "https://github.com/AntonStankov/HackTuesX/client",
 	},
 	author: {
-		name: "bobikenobi12",
+		name: "BezZevsovi",
 		url: "https://github.com/bobikenobi12/",
 	},
 };
