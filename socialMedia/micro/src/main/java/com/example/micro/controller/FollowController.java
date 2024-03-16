@@ -118,4 +118,14 @@ public class FollowController {
         }
         return users;
     }
+
+    @GetMapping("/getProfile/{username}")
+    public User getProfile(@PathVariable String username, HttpServletRequest request){
+        return  userService.findByUsername(username);
+    }
+
+    @GetMapping("/search/{name}")
+    public List<User> search(@PathVariable String username){
+        return userService.findByNameContaining(username);
+    }
 }

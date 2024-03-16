@@ -15,10 +15,13 @@ import java.sql.Timestamp;
 public class User {
     private Long id;
     private String name;
+    private String username;
     private String email;
     private Timestamp email_verified_at;
     private String password;
     private String remember_token;
     private Timestamp created_at;
     private Timestamp updated_at;
+    private int followers;
+    private int following;
 }

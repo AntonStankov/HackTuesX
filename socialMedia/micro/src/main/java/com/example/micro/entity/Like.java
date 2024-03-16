@@ -1,6 +1,6 @@
 package com.example.micro.entity;
 
-
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,13 +8,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Ocean {
+@AllArgsConstructor
+@Entity
+@Table(name = "likes")
+public class Like {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Long ocean_id;
     private Long user_id;
-    private String ocean_string;
-    private String name;
-    private int likes;
-    private boolean is_liked;
 }
