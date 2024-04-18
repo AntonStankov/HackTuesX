@@ -37,10 +37,6 @@ import { Redo, RefreshCw, Undo } from "lucide-react";
 import { useDroppable } from "@dnd-kit/core";
 
 import { Color } from "@/redux/features/simulation/simulation-handler";
-import {
-	AnalyticsResponse,
-	useLazyGetAnalyticsQuery,
-} from "@/redux/features/simulation/simulation-api-slice";
 interface Tile {
 	color: string;
 	label: string;
@@ -82,16 +78,11 @@ export default function Map() {
 	const history = useAppSelector(selectHistory);
 	const index = useAppSelector(selectIndex);
 	const tileColor = useAppSelector(selectPickedColor);
-	const [trigger, getAnalytics] = useLazyGetAnalyticsQuery();
 
 	const showGrid = useAppSelector(selectShowGrid);
 
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-
-	const { isOver, setNodeRef } = useDroppable({
-		id: "all",
-	});
 
 	useEffect(() => {
 		dispatch({ type: "simulation/generateMap" });
@@ -269,7 +260,7 @@ export default function Map() {
 				<Button
 					variant="link"
 					onClick={() => {
-						trigger({ inputMap: map });
+						navigate("/analytics");
 					}}
 				>
 					Analytics

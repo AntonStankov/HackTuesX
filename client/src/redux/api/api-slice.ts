@@ -5,7 +5,7 @@ import { RootState } from "@/redux/store";
 import Profile from "@/pages/Profile";
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: "https://api.ocean-paint.net/",
+	baseUrl: "https://api.kowen.tech/",
 	prepareHeaders: (headers, { getState }) => {
 		const token = (getState() as RootState).auth._token;
 		if (token) {

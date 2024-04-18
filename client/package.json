@@ -1,5 +1,5 @@
 {
-	"name": "client",
+	"name": "oceanpaint",
 	"private": true,
 	"version": "0.1",
 	"type": "module",
@@ -40,7 +40,7 @@
 		"react-router-dom": "^6.16.0",
 		"react-wrap-balancer": "^1.1.0",
 		"react-zoom-pan-pinch": "^3.4.3",
-		"recharts": "^2.12.3",
+		"recharts": "^2.12.5",
 		"redux": "^5.0.1",
 		"shadcn-ui": "^0.8.0",
 		"tailwind-merge": "^1.14.0",

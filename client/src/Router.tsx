@@ -14,6 +14,7 @@ import CreateSimulation from "./pages/CreateSimulation";
 import Chat from "./pages/Chat";
 import ProtectedLayout from "./components/layouts/ProtectedLayout";
 import AuthenticatedLayout from "./components/layouts/AuthenticatedLayout";
+import Analytics from "./pages/Analytics";
 
 export const router = createBrowserRouter(
 	[
@@ -36,15 +37,6 @@ export const router = createBrowserRouter(
 					],
 				},
 				{
-					path: "sample",
-					element: <Sample />,
-				},
-				{
-					path: "empty",
-					element: <Empty />,
-				},
-				{
-					// add slug
 					path: ":username",
 					element: <Profile />,
 				},
@@ -57,6 +49,10 @@ export const router = createBrowserRouter(
 		{
 			path: "map",
 			element: <Map />,
+		},
+		{
+			path: "analytics",
+			element: <Analytics />,
 		},
 		{
 			path: "",
