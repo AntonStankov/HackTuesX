@@ -61,59 +61,59 @@ const generateScatterData = ({
 };
 
 export default function Analytics() {
-	// const [analytics, setAnalytics] = useState<AnalyticsResponse>({
-	// 	budget: 3,
-	// 	ecology: 9.4,
-	// 	efficiency: 5,
-	// 	fishLife: 10,
-	// 	index: 3.56,
-	// 	oceanCleanliness: 10,
-	// 	sharkLife: 4,
-	// 	shipProductivity: 2,
-	// 	rigProductivity: 1,
-	// });
-	const map = useAppSelector(selectMap);
+	const [analytics, setAnalytics] = useState<AnalyticsResponse>({
+		budget: 3,
+		ecology: 9.4,
+		efficiency: 5,
+		fishLife: 10,
+		index: 3.56,
+		oceanCleanliness: 10,
+		sharkLife: 4,
+		shipProductivity: 2,
+		rigProductivity: 1,
+	});
+	// const map = useAppSelector(selectMap);
 
-	const [getAnalytics, { data: analytics, isLoading: isAnalyzing }] =
-		useLazyGetAnalyticsQuery();
+	// const [getAnalytics, { data: analytics, isLoading: isAnalyzing }] =
+	// 	useLazyGetAnalyticsQuery();
 
-	const { toast } = useToast();
-	const navigate = useNavigate();
+	// const { toast } = useToast();
+	// const navigate = useNavigate();
 
-	useEffect(() => {
-		if (map) {
-			try {
-				getAnalytics({ inputMap: map }).then((res) => {
-					toast({
-						title: "Analysis Complete",
-						description:
-							"Map has been analyzed. The data will now be visualized",
-					});
-				});
-			} catch (e: any) {
-				toast({
-					title: "Analysis Failed",
-					description: e.message,
-				});
-			}
-		}
-	}, [map]);
+	// useEffect(() => {
+	// 	if (map) {
+	// 		try {
+	// 			getAnalytics({ inputMap: map }).then((res) => {
+	// 				toast({
+	// 					title: "Analysis Complete",
+	// 					description:
+	// 						"Map has been analyzed. The data will now be visualized",
+	// 				});
+	// 			});
+	// 		} catch (e: any) {
+	// 			toast({
+	// 				title: "Analysis Failed",
+	// 				description: e.message,
+	// 			});
+	// 		}
+	// 	}
+	// }, [map]);
 
-	if (isAnalyzing) {
-		<div className="container mx-auto px-4 py-8">
-			<Icons.spinner className="w-15 h-15 animate-spin" />
-			<p className="text-center">Analyzing...</p>
-		</div>;
-	}
+	// if (isAnalyzing) {
+	// 	<div className="container mx-auto px-4 py-8">
+	// 		<Icons.spinner className="w-15 h-15 animate-spin" />
+	// 		<p className="text-center">Analyzing...</p>
+	// 	</div>;
+	// }
 
-	if (!analytics) {
-		<div className="container mx-auto px-4 py-8">
-			<p className="text-center">No data to display</p>
-			<Button onClick={() => navigate("/dashboard")}>
-				Go to dashboard
-			</Button>
-		</div>;
-	}
+	// if (!analytics) {
+	// 	<div className="container mx-auto px-4 py-8">
+	// 		<p className="text-center">No data to display</p>
+	// 		<Button onClick={() => navigate("/dashboard")}>
+	// 			Go to dashboard
+	// 		</Button>
+	// 	</div>;
+	// }
 
 	return (
 		<div className="container mx-auto px-4 py-8">
