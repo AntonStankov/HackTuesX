@@ -26,7 +26,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useParams } from "react-router-dom";
 
 import { useAppSelector } from "@/redux/hooks";
-import { selectUsername } from "@/redux/features/auth/auth-handler";
+import {
+	selectUsername,
+	selectFollowed,
+} from "@/redux/features/auth/auth-handler";
 
 const ProfileCard = ({ user }: { user: User }) => {
 	return (
@@ -51,6 +54,8 @@ export default function Profile() {
 	};
 
 	const usernameProfile = useAppSelector(selectUsername);
+	const followed = useAppSelector(selectFollowed);
+
 	const [followUser] = useFollowUserMutation();
 	const [removeFollow] = useRemoveFollowMutation();
 
@@ -192,21 +197,16 @@ export default function Profile() {
 						</DialogContent>
 					</Dialog>
 				</div>
-				{profile?.username === usernameProfile ? (
-					<Dialog>
-						<DialogTrigger className="w-full">
-							<Button className="w-full" variant="outline">
-								Edit Profile
-							</Button>
-						</DialogTrigger>
-						<DialogContent>
-							<DialogHeader>
-								<DialogTitle>Edit Profile</DialogTitle>
-							</DialogHeader>
-							<Label htmlFor="name">Name</Label>
-							<Input id="name" type="text" />
-						</DialogContent>
-					</Dialog>
+				{followed ? (
+					<Button
+						className="w-full"
+						variant="outline"
+						onClick={() =>
+							removeFollow({ id: profile?.id } as { id: number })
+						}
+					>
+						Unfollow
+					</Button>
 				) : (
 					<Button
 						className="w-full"

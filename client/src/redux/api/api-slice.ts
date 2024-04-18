@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut, setToken } from "@/redux/features/auth/auth-handler";
 import { authApiSlice } from "@/redux/features/auth/auth-api-slice";
 import { RootState } from "@/redux/store";
+import Profile from "@/pages/Profile";
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: "https://api.ocean-paint.net/",
@@ -34,5 +35,6 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 
 export const apiSlice = createApi({
 	baseQuery: baseQueryWithReauth,
+	tagTypes: ["Profile", "Maps"],
 	endpoints: () => ({}),
 });

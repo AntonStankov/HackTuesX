@@ -11,6 +11,7 @@ interface InitialState {
 	username: string;
 	followers: number;
 	following: number;
+	_followed: boolean;
 }
 
 const authState: InitialState = {
@@ -23,6 +24,7 @@ const authState: InitialState = {
 	followers: 0,
 	following: 0,
 	username: localStorage.getItem("username") || "",
+	_followed: false,
 };
 
 export const authHandlerSlice = createSlice({
@@ -79,6 +81,7 @@ export const authHandlerSlice = createSlice({
 				state.followers = action.payload.followers;
 				state.following = action.payload.following;
 				state.username = action.payload.username;
+				state._followed = action.payload._followed;
 			}
 		);
 		builder.addMatcher(
@@ -106,5 +109,6 @@ export const { setToken, logOut } = authHandlerSlice.actions;
 
 export const selectToken = (state: RootState) => state.auth._token;
 export const selectUsername = (state: RootState) => state.auth.username;
+export const selectFollowed = (state: RootState) => state.auth._followed;
 
 export default authHandlerSlice;

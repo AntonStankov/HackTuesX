@@ -14,6 +14,7 @@ import {
 	setHistory,
 	selectPickedColor,
 	changeColor,
+	resetMap,
 } from "@/redux/features/simulation/simulation-handler";
 
 import { useEffect, useState } from "react";
@@ -31,7 +32,7 @@ import { Button } from "@/components/ui/button";
 import Draggable from "react-draggable";
 import { useNavigate } from "react-router-dom";
 
-import { Redo, Undo } from "lucide-react";
+import { Redo, RefreshCw, Undo } from "lucide-react";
 
 import { useDroppable } from "@dnd-kit/core";
 
@@ -40,15 +41,6 @@ import {
 	AnalyticsResponse,
 	useLazyGetAnalyticsQuery,
 } from "@/redux/features/simulation/simulation-api-slice";
-import {
-	Dialog,
-	DialogContent,
-	DialogTitle,
-	DialogTrigger,
-} from "@radix-ui/react-dialog";
-import { DialogHeader } from "@/components/ui/dialog";
-
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from "recharts";
 interface Tile {
 	color: string;
 	label: string;
@@ -188,31 +180,6 @@ export default function Map() {
 		}
 	}
 
-	function numbersToAnalytics(data: AnalyticsResponse) {
-		return [
-			{
-				name: "Shark",
-				total: data.sharkLife,
-			},
-			{
-				name: "Predator Fish",
-				total: data.fishLife,
-			},
-			{
-				name: "Weak Fish",
-				total: data.oceanCleanliness,
-			},
-			{
-				name: "Passive Fish",
-				total: data.shipProductivity,
-			},
-			{
-				name: "Oil Rig",
-				total: data.rigProductivity,
-			},
-		];
-	}
-
 	return (
 		<div className="flex flex-col items-center justify-center">
 			<Draggable
@@ -287,7 +254,7 @@ export default function Map() {
 					</TransformComponent>
 				</TransformWrapper>
 			</Draggable>
-			<div className="absolute bottom-10 right-5 p-4 space-x-4 inline-flex border border-gray-300 dark:border-gray-700 rounded-lg">
+			<div className="absolute bottom-10 right-5 p-4 space-x-4 inline-flex border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
 				<div className="flex space-x-2">
 					{tileTypes.map((tile, idx) => (
 						<button
@@ -299,54 +266,22 @@ export default function Map() {
 						></button>
 					))}
 				</div>
-				<Dialog>
-					<DialogTrigger asChild>
-						<Button
-							variant="link"
-							onClick={() => {
-								trigger({ inputMap: map });
-							}}
-						>
-							Analytics
-						</Button>
-					</DialogTrigger>
-					<DialogContent className="sm:max-w-md">
-						<DialogHeader>
-							<DialogTitle>Following</DialogTitle>
-						</DialogHeader>
-						<ResponsiveContainer width="100%" height={350}>
-							<BarChart
-								data={
-									getAnalytics.data &&
-									numbersToAnalytics(
-										getAnalytics.data as AnalyticsResponse
-									)
-								}
-							>
-								<XAxis
-									dataKey="name"
-									stroke="#888888"
-									fontSize={12}
-									tickLine={false}
-									axisLine={false}
-								/>
-								<YAxis
-									stroke="#888888"
-									fontSize={12}
-									tickLine={false}
-									axisLine={false}
-									tickFormatter={(value) => `$${value}`}
-								/>
-								<Bar
-									dataKey="total"
-									fill="currentColor"
-									radius={[4, 4, 0, 0]}
-									className="fill-primary"
-								/>
-							</BarChart>
-						</ResponsiveContainer>
-					</DialogContent>
-				</Dialog>
+				<Button
+					variant="link"
+					onClick={() => {
+						trigger({ inputMap: map });
+					}}
+				>
+					Analytics
+				</Button>
+				<Button
+					variant="link"
+					onClick={() => {
+						dispatch(resetMap());
+					}}
+				>
+					<RefreshCw />
+				</Button>
 				<Button
 					onClick={() => dispatch(undoAction())}
 					disabled={index === 0}

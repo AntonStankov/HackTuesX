@@ -21,13 +21,6 @@ export default function Dashboard() {
 
 	const { data: simulations, isLoading } = useGetMySimulationsQuery();
 
-	if (isLoading)
-		<>
-			<Skeleton className="w-[368px] h-[256px]" />
-			<Skeleton className="w-[368px] h-[256px]" />
-			<Skeleton className="w-[368px] h-[256px]" />
-		</>;
-
 	return (
 		<>
 			<PageHeader className="flex flex-col md:flex-row justify-between">
@@ -48,29 +41,37 @@ export default function Dashboard() {
 				</Button>
 			</PageHeader>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-				{simulations?.oceans.map((simulation) => (
-					<Card
-						onClick={() =>
-							navigate(`/map/${simulation.ocean_name}`)
-						}
-						key={simulation.ocean_name}
-						className="w-[368px] h-[256px] cursor-pointer"
-					>
-						<CardHeader>
-							<CardTitle>
-								<Avatar about={simulation.ocean_name} />
-							</CardTitle>
-							<CardDescription>
-								<p className="text-sm text-gray-500 dark:text-gray-400">
-									{simulation.ocean_name}
-								</p>
-								<p className="text-md text-gray-600 dark:text-gray-300">
-									24/ 100 score
-								</p>
-							</CardDescription>
-						</CardHeader>
-					</Card>
-				))}
+				{isLoading ? (
+					<>
+						<Skeleton className="w-[368px] h-[256px]" />
+						<Skeleton className="w-[368px] h-[256px]" />
+						<Skeleton className="w-[368px] h-[256px]" />
+					</>
+				) : (
+					simulations?.oceans.map((simulation) => (
+						<Card
+							onClick={() =>
+								navigate(`/map/${simulation.ocean_name}`)
+							}
+							key={simulation.ocean_name}
+							className="w-[368px] h-[256px] cursor-pointer"
+						>
+							<CardHeader>
+								<CardTitle>
+									<Avatar about={simulation.ocean_name} />
+								</CardTitle>
+								<CardDescription>
+									<p className="text-sm text-gray-500 dark:text-gray-400">
+										{simulation.ocean_name}
+									</p>
+									<p className="text-md text-gray-600 dark:text-gray-300">
+										24/ 100 score
+									</p>
+								</CardDescription>
+							</CardHeader>
+						</Card>
+					))
+				)}
 			</div>
 		</>
 	);

@@ -40,6 +40,7 @@ export const analyticsApiSlice = apiSlice.injectEndpoints({
 					ocean_name,
 				},
 			}),
+			invalidatesTags: ["Maps"],
 		}),
 		saveMap: builder.mutation<void, string>({
 			query: (map_string) => ({
@@ -52,6 +53,7 @@ export const analyticsApiSlice = apiSlice.injectEndpoints({
 		}),
 		getMySimulations: builder.query<MyOceans, void>({
 			query: () => "server2/get_my_ocean",
+			providesTags: ["Maps"],
 		}),
 
 		deleteMap: builder.mutation<void, string>({

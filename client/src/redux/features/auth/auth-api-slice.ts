@@ -29,6 +29,7 @@ export interface User {
 	updated_at: string;
 	followers: number;
 	following: number;
+	_followed: boolean;
 }
 
 export const authApiSlice = apiSlice.injectEndpoints({
@@ -81,12 +82,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
 				url: `media/user/getProfile/${username}`,
 				method: "GET",
 			}),
+			providesTags: ["Profile"],
 		}),
 		followUser: builder.mutation<void, { id: number }>({
 			query: ({ id }) => ({
 				url: `media/user/follow/${id}`,
 				method: "POST",
 			}),
+			invalidatesTags: ["Profile"],
 		}),
 		getFollowers: builder.query<User[], void>({
 			query: () => ({
@@ -105,6 +108,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 				url: `media/user/remove_following/${id}`,
 				method: "DELETE",
 			}),
+			invalidatesTags: ["Profile"],
 		}),
 	}),
 	overrideExisting: false,

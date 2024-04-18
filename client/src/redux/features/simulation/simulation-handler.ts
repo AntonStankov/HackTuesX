@@ -194,6 +194,13 @@ const simulationSlice = createSlice({
 				state.map = state.history[state.index];
 			}
 		},
+		resetMap: (state) => {
+			// set to initial map stored in local storage
+			state.map =
+				localStorage.getItem("map") || generateStringWithLength(20000);
+			state.history = [];
+			state.index = 0;
+		},
 	},
 });
 
@@ -206,6 +213,7 @@ export const {
 	undoAction,
 	redoAction,
 	setHistory,
+	resetMap,
 } = simulationSlice.actions;
 
 export const selectMap = (state: RootState) => state.simulation.map;
