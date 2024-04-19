@@ -26,10 +26,6 @@ import { useSearchParams } from "react-router-dom";
 
 const schema = z
 	.object({
-		username: z.string().regex(/^[a-zA-Z0-9]+$/, {
-			message:
-				"Username must only contain letters and numbers, no spaces or special characters",
-		}),
 		name: z.string().nonempty(),
 		email: z.string().email(),
 		password: z
@@ -60,7 +56,6 @@ export function RegisterForm({ className, ...props }: UserRegisterFormProps) {
 		resolver: zodResolver(schema),
 
 		defaultValues: {
-			username: searchParams[0]?.get("username") ?? "",
 			email: searchParams[0]?.get("email") ?? "",
 			password: searchParams[0]?.get("password") ?? "",
 			confirmPassword: searchParams[0]?.get("confirmPassword") ?? "",
@@ -73,7 +68,6 @@ export function RegisterForm({ className, ...props }: UserRegisterFormProps) {
 				email: data.email,
 				password: data.password,
 				name: data.name,
-				username: data.username,
 			}).unwrap();
 
 			toast({
@@ -95,32 +89,6 @@ export function RegisterForm({ className, ...props }: UserRegisterFormProps) {
 				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<div className="grid gap-2">
 						<div className="grid gap-1">
-							<FormField
-								control={form.control}
-								name="username"
-								render={({ field, formState }) => (
-									<FormItem>
-										<FormLabel className="sr-only">
-											Username
-										</FormLabel>
-										<FormControl>
-											<Input
-												id="username"
-												placeholder="Username"
-												type="text"
-												autoCapitalize="none"
-												autoComplete="username"
-												autoCorrect="off"
-												disabled={isLoading}
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage>
-											{formState.errors.username?.message}
-										</FormMessage>
-									</FormItem>
-								)}
-							/>
 							<FormField
 								control={form.control}
 								name="name"

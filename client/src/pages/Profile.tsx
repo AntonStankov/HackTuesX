@@ -115,7 +115,7 @@ export default function Profile() {
 							alt="Jakob Hoeg"
 							sizes="40"
 						/>
-						<AvatarFallback>{profile?.username[0]}</AvatarFallback>
+						<AvatarFallback>{profile?.name[0]}</AvatarFallback>
 					</Avatar>
 				</div>
 				<div className="flex items-center space-x-2 py-6">

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Icons } from "@/components/icons";
 import { appConfig } from "@/config/app";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -15,15 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { mainMenu } from "@/config/menu";
-import { ChevronDownIcon, ViewVerticalIcon } from "@radix-ui/react-icons";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { Logo } from "../logo";
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/ui/accordion";
 
 import {
 	useGetPersonProfileQuery,
@@ -186,7 +178,7 @@ export function Header() {
 												{data?.name}
 											</p>
 											<p className="text-xs leading-none text-muted-foreground">
-												@{data?.username}
+												@{data?.name}
 											</p>
 										</div>
 									)}
@@ -194,7 +186,7 @@ export function Header() {
 								<DropdownMenuSeparator />
 								<DropdownMenuItem
 									onClick={() => {
-										navigate(`/${data?.username}`);
+										navigate(`/${data?.name}`);
 									}}
 								>
 									Profile

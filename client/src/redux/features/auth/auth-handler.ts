@@ -8,7 +8,6 @@ interface InitialState {
 	id: number;
 	email: string;
 	name: string;
-	username: string;
 	followers: number;
 	following: number;
 	_followed: boolean;
@@ -23,7 +22,6 @@ const authState: InitialState = {
 	name: "",
 	followers: 0,
 	following: 0,
-	username: localStorage.getItem("username") || "",
 	_followed: false,
 };
 
@@ -53,8 +51,8 @@ export const authHandlerSlice = createSlice({
 					"refreshToken",
 					action.payload.refresh_token
 				);
-				state.email = action.payload.username;
-				localStorage.setItem("username", action.payload.username);
+				// state.email = action.payload.username;
+				// localStorage.setItem("username", action.payload.username);
 			}
 		);
 		builder.addMatcher(
@@ -68,8 +66,8 @@ export const authHandlerSlice = createSlice({
 					"refreshToken",
 					action.payload.refresh_token
 				);
-				state.email = action.payload.username;
-				localStorage.setItem("username", action.payload.username);
+				// state.email = action.payload.
+				// localStorage.setItem("username", action.payload.username);
 			}
 		);
 		builder.addMatcher(
@@ -80,7 +78,6 @@ export const authHandlerSlice = createSlice({
 				state.name = action.payload.name;
 				state.followers = action.payload.followers;
 				state.following = action.payload.following;
-				state.username = action.payload.username;
 				state._followed = action.payload._followed;
 			}
 		);
@@ -92,7 +89,6 @@ export const authHandlerSlice = createSlice({
 				state.name = action.payload.name;
 				state.followers = action.payload.followers;
 				state.following = action.payload.following;
-				state.username = action.payload.username;
 			}
 		);
 		builder.addMatcher(
@@ -108,7 +104,7 @@ export const authHandlerSlice = createSlice({
 export const { setToken, logOut } = authHandlerSlice.actions;
 
 export const selectToken = (state: RootState) => state.auth._token;
-export const selectUsername = (state: RootState) => state.auth.username;
+export const selectUsername = (state: RootState) => state.auth.name;
 export const selectFollowed = (state: RootState) => state.auth._followed;
 
 export default authHandlerSlice;
