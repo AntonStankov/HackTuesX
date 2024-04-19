@@ -25,7 +25,7 @@ export const analyticsApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		getAnalytics: builder.query<AnalyticsResponse, { inputMap: string }>({
 			query: ({ inputMap }) => ({
-				url: "laravel2/api/analyze-map",
+				url: "laravel2/analyze-map",
 				method: "POST",
 				body: {
 					inputMap,
